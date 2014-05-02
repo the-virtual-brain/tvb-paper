@@ -1,0 +1,942 @@
+Reviews
+
+TODO when source files become public, remove or keep this file private
+
+
+Independent Review Report, Reviewer 3
+
+	GENERAL EVALUATION
+	Does this manuscript conform to the style guidelines for Methods articles, described below? If not, please contact the Editorial Office.
+	Methods articles present a cutting-edge technology and/or software that opens new avenues for experimental investigation of important issues in a field. Methods should include in the form of a brief statement: the experimental objectives, the limitations of current techniques, and a detailed protocol of the new technique. In addition, there should be some data 
+	Yes
+
+	Main Message:
+	Describe the method presented in this article.
+	Authors demonstrate the use of the simulation framework they developed. This allows the simulation of brain-scale simulation of brain activity, thanks to the mean-field approximation. The text provides with a short introduction to the use of the simulator and is certainly of value to the readers of this journal.
+
+Thank you for your kind comments and constructive criticism.
+
+	The manuscript is well written though some comments and minor typos that should be fixed (see below).
+	Ratings:
+	Quality of the research:
+	8
+	Quality of the presentation of the method:
+	8
+	Novelty of the method:
+	6
+	Potential significance of the method:
+	7
+	Quality of the figure(s):
+	7
+	Quality of the writing:
+	8
+	SPECIFIC EVALUATION
+	Fundamental Flaws:
+	Are there any fundamental flaws in the method? If yes, please specify.
+	No
+
+	Expert Authority:
+	Is the method described accurately enough to be reproducible?
+	Yes
+
+	Are relevant methods of other authors mentioned? If not, please specify the methods the author should incorporate.
+	Yes
+
+	Are methods of other authors accurately presented and interpreted?
+	Yes
+
+	Is the method based on high quality data? If not, please describe the problems with the data on which the method is based.
+	Yes
+
+	Ethical Standards:
+	Is the work ethical in your opinion?
+	Yes
+
+	Was the research carried out in accordance with established animal use practices?
+	Not Applicable
+
+	Is any use of human subjects performed according to acceptable standards?
+	Yes
+
+	Complementary Data:
+	Should an accession number of nucleotide/amino acid sequences be included?
+	Not Applicable
+
+	Should an accession number for microarray data be included?
+	Not Applicable
+
+	Biosecurity Standards:
+	Does the article describe experiments using a select agent or toxin?
+	Not Applicable
+
+	Is it possible that this manuscript contains an NSABB-defined experiment of concern?
+	Not Applicable
+
+	Abstract:
+	Is the abstract written in a clear and comprehensive way?
+	Yes
+
+	Article Length:
+	A Method Article should not exceed 12,000 words. Should any part of the article be shortened? If yes, please specify which part should be shortened.
+	No
+
+	Language and Grammar:
+	Is the language and grammar of sufficient quality?
+	Yes
+
+	Should the paper be sent to an expert in English language and scientific writing?
+	No
+
+	OTHER COMMENTS
+	Please add any further comments you have regarding this manuscript.
+
+	-I was happy with the presentation of the framework in the context of other projects, but I miss a comparison with other approaches like SPM or pyNN.
+
+(MW) SPM and pyNN, both projects differing in significant ways from TVB, have been adding the
+the discussion.
+(PSL) PyNN is mainly an interface to be used with different neural network simulators, diverging from TVB itself.
+(SK) SPM is primarily a tool for doing statistical analysis of data. There is not really a meaningful relationship to TVB.
+SPM incorporates Dynamic Causal Modelling (DCM)  which does model fitting to data at the level of a small set of nodes, though the modelling isn't really the point but rather the statistical fitting to the functional data.
+
+
+	-It is mentionned that V1 can be activated... do you plan to include some topography in these maps, and then to support for input stimuli? Similarly, can the output be read-out for potential motor actions?
+
+This is certainly one of many interesting avenues in the future. It is currently possible
+to stimulate and read-out the activity from any area. That said, such work will want to 
+take advantage of the cortical surface simulations to do so, as the resolution of the 
+representation of the cortex is much higher. 
+
+We have included a small note to confirm this possibility next to the mention of V1 stimulation.
+
+	-The package seems to come "all batteries included". However, could this choice still allow the  inclusion of other tools. For instance it is very helpful to have a  tool for managing and tracking projects based on numerical simulation or analysis, such as sumatra https://neuralensemble.org/sumatra/ .
+
+The batteries included approach is intended to ease the adoption for those users who
+don't have preferred packages and tools already, and to provide a set of components known
+to work well together.
+
+That said, the entire package has been designed with extensibility in mind, and just 
+about any piece could be swapped out, from analysis to data formats.
+
+To respond to the reviewer's example:
+while the authors (MW, PSL) do not personally use Sumatra day-to-day, such a project management 
+package (according to its documentation) is perfectly compatible with the console based
+scenario we discuss for using TVB. 
+
+
+	-Integrators: allows for a cross-validation of models
+
+(MW) This is an on-going topic of research, precisely for which this platform has been
+built: validation of the simulation models has begun in the historical papers we cite,
+where links are made between empirical and simulated resting state data. 
+
+(If possible to mention:) several papers based on TVB (emprical?) are currently submitted 
+and some favorable reviewed.
+
+Hence we hope it can be understood why these models are not yet extensively cross 
+validated.
+
+(PSL) Validation of models is a subject to be discussed in TVB review paper, currently in preparation, and possibly the backbone of TVB Use Cases article where ideally we should compare experimental and simulated data. 
+
+
+	- The results presented in the last figures (11 & 12) are too briefly explained in the text. They are certainly odf relevance for the rest to demonstrate the efficiency of the presented method.
+
+We have expanded the text in the captions and/or text to more clearly explain
+those figures.
+
+	Minor comments:
+
+	 * p.1 (abstract) "web based" > "web-based"
+
+Fixed
+
+	 * p.2 " for implementing modeling tools. (Spacek et al., 2008)" > " for implementing modeling tools (Spacek et al., 2008)."
+
+Fixed
+
+	 * p.4 in Code 1, you define a speed, but do not give an unit.
+
+It is millimeters per milliseconds. We have fixed this. 
+
+	 * p.6 "on CPUs Intel(R) Xeon(R) X5672 @ 3.20GHz (Linux kernel 3.1.0-1-amd64)." : on a single-core machine?
+
+No, this is a multicore processor (?). Simulations were run on a cluster whose nodes are Intel Xeon X5672 (quad-core) processors.
+
+	 * p.7 I did not see "(deterministic 11A and stochastic 11B integration schemes)" explained elsewhere in the text
+
+p.5 left column, in paragraph "Integrators" it is explained that integration methods are provided to solve deterministic and stochastic differential equations. Then two main types of integration schemes are defined: deterministic or stochastic. Also, the caption of figure 11 has been extended to clarify that in 11A a deterministic integration scheme was used and in 11B a stochastic scheme was chose since noise was added to the model. This figure reference has been fixed. 
+Corresponding additions to the text have been incorporated.
+
+	 * p.7 it is rather unfair to state that "they, most importantly, do not consider the space-time structure of brain connectivity (connection weights and transmission associated time delays) constraining the full brain network dynamics": most models do, but these models can implement such delays (see for instance in the high level API of PyNN).
+
+MW: we need to more effectively communicate here; there is a bit of a theoretical gap between delays
+typically considered in PyNN style simulations and our own. 
+
+They can implement delays, but it is usually considered as just another way of adding complexity. In
+TVB, however, it is a crucial ingredient in generation of the space time structure.
+
+(PSL): While it is true that connectivity and transmission delays can be set up in other simulation environments (NEST, BRIAN) or through PyNN, they do not correspond to the large-scale of the whole brain. At the moment, TVB is the only tool designed to incorporate realistic full brain connectivity as the base component for brain network models.
+
+
+	 * p.7 fix grammar of "Focusing on the brain’s large-scale architecture, in addition to the dimension reduction accomplished through the mean field meth- ods applied on the mesoscopic scale, allows TVB to make computer simulations on the full brain scale on workstations and network workstation parallel clusters, with no need to use supercomputing resources."
+
+Correct, the sentence had no (grammatical) subject.
+
+-"allows TVB to make"
++"TVB allows for"
+
+	 * p.7 no need to cite again some simulators in "brain models at the level of neurons (Goodman and Brette, 2008, 2009; Cornelis et al., 2012), "
+
+(if they were already cited, this is correct; assuming so..)
+
+This has been fixed.
+
+	 * p.9 check initials: "Goodman, D. and Brette, R. (2008). Brian: a simulator for spiking neural networks in python. Front Neuroinform, 2:5.
+	Goodman, D. F. M. and Brette, R. (2009). The brian simulator. Front Neurosci, 3(2):192–197."
+
+This and OTHER REFERENCES have been checked for correct author names.
+
+	 * p.13 the reference to "TVB svn revision 4355." should be removed xor explained.
+
+(this is true)
+
+This reference to the version control revision has been removed as it is irrelevent to 
+the content of the article.
+
+	 * p.13 re-order " integration scheme 4th Runge-Kutta" 
+
+This has been fixed to read "4th order Runge-Kutta itnegration scheme"
+
+	 * p.13 "at 40 Hz." > "at approximately 40 Hz."
+
+(someone is feeling generous..)
+
+Fixed
+
+	 * p.13 rephrase "Variance of the Variance of nodes." ("Mean variance of the activity of each node."?)
+
+(?) This now reads "variability of the temporal variance of each node"
+PSL: Consider either keeping VofV since it's the name of one of TVB Analyzers or renaming in TVB. 
+Text giving a definition of what this metric means has been added. 
+Variance of the Variance. Having an output array of dimensions [time points x nodes], all the time-series are zero-centered, then the variance for each node time-series is calculated and finally the variance of the node variances is computed. 
+(?) Consider a reference where a scalar metric is used to represent a data set in parameter space (data reduction).
+
+
+
+
+
+	 * Fig12 put the legend somewhere else than the plot
+
+This has been fixed.
+
+
+	*************************
+	Independent Review Report, Reviewer 2
+
+	GENERAL EVALUATION
+	Does this manuscript conform to the style guidelines for Methods articles, described below? If not, please contact the Editorial Office.
+	Methods articles present a cutting-edge technology and/or software that opens new avenues for experimental investigation of important issues in a field. Methods should include in the form of a brief statement: the experimental objectives, the limitations of current techniques, and a detailed protocol of the new technique. In addition, there should be some data 
+	Yes
+
+	Main Message:
+	Describe the method presented in this article.
+	Sanz Leon and colleagues present in this manuscript The Virtual Brain (TVB), a software package supporting the simulation of large-scale brain models. Models combine large-scale connectivity data obtained from databases such as CoCoMac or imaging, which provide connectivity between 'nodes', with neural mass models for the dynamics within the individual nodes. TVB provides both scripted and GUI-based ways of manipulating the network under study and can compute and visualize a wide range of measures, including clinical measures such as scalp EEG signals.  As such, TVB appears to have significant potential as a neuroscience research tool, with possible applications to clinical use.
+
+	Manuscripts describing large software packages as a scientific method are a difficult beast as scientific publications and objects of peer review. As these packages are often complex, a detailed discussion of their inner workings would go far beyond the length limits for a paper, and the result is often a more or less superficial listing of features adorned with screenshots and sample runs. To put it bluntly, there is always a risk that such manuscripts are closer to sales brochures than to scientific papers. Consider, in contrast, what one would expect from a methods paper describing a novel spike sorting algorithm: besides a detailed description of the algorithm employed, we'd expect careful evaluation of the new method using data with known properties, and a delineation of the limits of the method. The key question to answer is why the reader should trust the method.
+
+(please see thevirtualbrain.org for a brochure)
+
+	How can we apply this approach to publications on scientific software packages? I consider the following four questions essential:
+
+	1. Why should I trust this software?
+	2. What is its scope of applicability?
+	3. How well does it perform?
+	4. How does it work?
+
+	The first question applies both to the suitability of numerical methods employed and to the correct implementation of these methods, as well as the maintenance of quality over time. In particular, authors need to describe the tests to which they have subjected their software, both in form of specific tests simulations that are quantitatively compared to solutions obtained by other means, but also in form of automatized unit- and acceptance tests, the use of continuous integration tools to ascertain that the software is re-tested after each code change, and code review practices within the developer group. Without rigorous testing and quality control, software first and foremost remains a generator of pretty pictures, instead of being a reliable tool of science.
+
+	The answer to the second question should provide fellow scientist with sufficient information to judge whether the method will be a suitable tool for scientific problems they attempt to address.
+
+	Question 3 addresses performance in the sense of speed and error. Essentially, it should permit scientist interested in the method to judge whether the method (i) achieves the necessary precision required, (ii) will deliver results within a reasonable timeframe on the resources available, and (iii) is competitive with respect to other methods for the same purpose.
+
+	The fourth point finally addresses the core of scientific publication: We publish so others can learn from our insights, and can build upon them---not in the form of a applying a black box tool, but by taking our ideas, mixing an modifying them to create new tools and methods.
+
+	While I find the present manuscript in general well written, I find it wanting with respect to questions 1, 3, and 4.
+
+	First of all, I don't find any discussion on unit-, acceptance- or regression testing, continuous integration, or code review policies. I also cannot find any description of systematic, quantitative comparisons with results obtained using other methods independently. The section "Replicating data from the literature" provides a number of graphs obtained with TVB, but certainly no quantitative test. Indeed, since the data that is supposedly replicated is not shown, it is not even possible to judge whether TVB results agree qualitatively with data from the literature. Given that the authors indicate that TVB might become a tool for clinical practice with patient-specific models derived from imaging data, I would think that quality assurance should have very high priority for TVB.
+
+(A number of a points to be addressed in this sawed-off-shotgun comment)
+
+Current status of the use of software dev practices in TVB
+
+- algorithms standard from literature (Euler-Maruyama integration)
+	tested in standard ways (testing convergence)
+- simulator based on several iterative improvements of previously peer reviewed simulation paradigms
+- continuous integration
+- unit testing of framework
+- integration testing of simulator
+- qualitative links between simulation dynamics and empirical data
+- no comparison with other similar methods because TVB unifies previous methods
+- code quality guidelines & periodic code reviews
+- several rounds of acceptance testing (verify software meet design use cases)
+framework: 
+- as we are using Agile techniques for managing project, each task is considered done, only after an entire procedure of validation (definition of Done): automated unit-test added, status finish from the person implementing the task and status closed from the person responsible for the module, which means a second test.
+- before each release we have a period for manual testing, mostly done by test-groups from the scientific world checking that no major issues gets passed into the release.
+- We also have automated  integration tests (running with Selenium and JMeter on top of a browser engine) testing UI navigation and major TVB workflows.
+
+On going and future work
+
+- unit & regression testing of simulator
+- entry to clinical validation in our own group 
+- validation by wider scientific groups
+
+
+A more general comment, perhaps reflecting our missed opportunity to
+communicate the work the work properyl, and to dispel the angst of this
+reviewer: TVB  represents, if anything, the integration of diverse, existing,
+peer reviewed work (90% true), that traditionally requires the expertise of
+several groups, into one package usuable by people from the many backgrounds
+in neuroscience.
+
+
+	Concerning performance, there is no information about error, or a discussion of why an when the Heun method---which appears to be the preferred numerical integration method---is applicable and what numerical errors are to be expected.  The timing experiments presented in Fig 7 provide very little information: Isn't it trivial that simulating 2s takes twice as long as simulating 1s? This should especially hold for a fixed time-stepping scheme as used here. Deviations from this would either point to strong fluctuations in dynamics and thus variations in load (in which case the benchmark case is ill-defined), or a design problem (or bug) in the software.  From Fig. 7A it also seems that halving the time step doubles the duration of the simulation time---again a trivial property of fixed time stepping schemes. Finally, there is no discussion of the trade-off between step size and accuracy---is there maybe a "sweet spot" providing maximal accuracy at minimal cost?
+
+	You argue that you  cannot compare TVB runtimes to any other simulator, as there is no comparable simulator available. In this case it would be interesting to discuss theoretically expected runtimes (from estimates of number of operations required), to get a rough idea of how performant your code is.
+
+
+We have modified our discussion of runtimes in the following ways
+
+- Simulations similar to the neural dynamics simulation core have been constructed in PyNN and 
+	Brian to test relative performance, and we have noted the results in the manuscript, with the
+	caveat that the architectures are quite different
+
+- We have developed analytic estimates of run times in a appendix/supplementary materials, noting
+	that as TVB simulations can be memory bound, the hardware's memory bandwidth can be
+	*the* determining factor (a reason why we had not previously developed such an analysis)
+
+- Adaptive schemes are possible even in the presence of nosie and delays, however linear interpolation
+	on an already memory bound algorithm will not likely relieve any speed/accuracy tradeoff.
+
+We have revised Figure 7 to include more informative benchmarks, and we've update the caption
+accordingly
+
+
+	Given that you point out the parallel capabilities of TVB, you should provide data on how TVB scales in parallel simulations.
+
+TVB parallelizes different tasks e.g. simulation and analyses, but not the tasks themselves. This is
+subject of current work (GPU), and has been clarified in the text.
+
+	Concerning question 4, I find that the is far too little information about the way the simulator works. The only point described in detail are the TVB Datatypes, and even for them we mainly learn that they are NumPy arrays with some metadata attached. There is no information about how data flows between the different parts of the simulator, how the update cycle is organized, how delays of different length are implemented and causality ensured, and how parallelism is implemented and integrated in the simulator.
+
+Good point; we have outlined both the systemic use of datatypes and the structure of the main
+simulation algorithm.
+
+	Ratings:
+	Quality of the research:
+	8
+	Quality of the presentation of the method:
+	5
+	Novelty of the method:
+	9
+	Potential significance of the method:
+	9
+	Quality of the figure(s):
+	6
+	Quality of the writing:
+	7
+	SPECIFIC EVALUATION
+	Fundamental Flaws:
+	Are there any fundamental flaws in the method? If yes, please specify.
+	No
+
+	Expert Authority:
+	Is the method described accurately enough to be reproducible?
+	No
+	See above.
+	Are relevant methods of other authors mentioned? If not, please specify the methods the author should incorporate.
+	Yes
+
+	Are methods of other authors accurately presented and interpreted?
+	Yes
+
+	Is the method based on high quality data? If not, please describe the problems with the data on which the method is based.
+	No
+	"Data" makes little sense here, but see discussion above.
+	Ethical Standards:
+	Is the work ethical in your opinion?
+	Yes
+
+	Was the research carried out in accordance with established animal use practices?
+	Not Applicable
+
+	Is any use of human subjects performed according to acceptable standards?
+	Not Applicable
+
+	Complementary Data:
+	Should an accession number of nucleotide/amino acid sequences be included?
+	Not Applicable
+
+	Should an accession number for microarray data be included?
+	Not Applicable
+
+	Biosecurity Standards:
+	Does the article describe experiments using a select agent or toxin?
+	Not Applicable
+
+	Is it possible that this manuscript contains an NSABB-defined experiment of concern?
+	Not Applicable
+
+	Abstract:
+	Is the abstract written in a clear and comprehensive way?
+	Yes
+
+	Article Length:
+	A Method Article should not exceed 12,000 words. Should any part of the article be shortened? If yes, please specify which part should be shortened.
+	No
+
+	Language and Grammar:
+	Is the language and grammar of sufficient quality?
+	Yes
+
+	Should the paper be sent to an expert in English language and scientific writing?
+	No
+
+	OTHER COMMENTS
+	Please add any further comments you have regarding this manuscript.
+	1. Author names in citations should not be in parentheses when used as names in the text. This needs to be fixed throughout.
+
+This is fixed.
+
+	2. While the English is very good overall, there seem to be a few glitches here an there, so I'd suggest careful proofreading by a "stickler".
+
+aye aye cap'n
+
+	3. P. 2, left column, about middle: "underwrites the need" should be "underscore ..."
+
+This is fixed.
+
+	4. In the second paragraph of 1.2, you suddenly mention patient data. This comes abrupt and you should give a better overview over potential data sources.
+
+This excellent point has been taken, and we have adjusted the text accordingly.
+PSL: I didn't want to state that clinicians are users without programming knowledge therefore we are assuming that their data come from patients. 
+
+	5. Why is section 2 typeset in a smaller font?
+
+This has been fixed.
+PSL: The font size and style are given by the Frontiers latex template.
+
+	6. P. 3, left column: I find that "When using TVB web application" and similar phrases sound incorrect and that "When using the TVB web application" reads much better---even though it expands to "...the the virtual brain web application".
+
+(in the US, we can say "the river Rio Grande", so go figure. This is a matter of taste, not grammar
+in American English. I (MW) personally prefer exchange "the VB" with "TVB" as convenience demands.)
+(PSL): A possible solution might be to expand the acronym TVB to "TheVirtualBrain" or "The Virtual Brain" and use TVB when speaking about Datatypes, Modules, classes, etc.
+
+This has been fixed consistently throughout the article to read more smoothly.
+
+	7. Table 1 provides a level of detail unsuitable for a scientific paper: All packages are standard and easily available and there is no indication in the manuscript that the (un-)availability of particular packages had design consequences that need to be balanced against important features of TVB. Therefore, you should drop the table---it belongs with the installation guidelines on your website. The same holds for details of Matlab path settings (p 3, left, towards bottom).
+
+This has been moved to supplementary materials / la poubelle.
+
+	8. Why does a basic installation of TVB require 50GB disk space?
+
+
+Installing TVB does not require more than 400 MB. However, the rest of the space that TVB will use, largely depends on the length and numbers of simulations users will perform. Additionally, 50Gb is indeed a mistake, it should be 5Gb. This is just a quota, which in the case of multiple users accessing one instance of TVB an administrator can specify the maximum hard disk space per user.  By default it set to 5GB. This has been corrected and improved.
+
+
+
+	9. P. 4, left, top: Within which scoped are GUIDs unique?
+
+GUIDs are generated  using the current time and the MAC address of the computer and using the standard python uuid module. So, GUIDs have a genuinely global scope as unique IDs.
+
+
+	10. P. 4, left, top: ZIP and BZIP2 are general compression formats, listing them as possible input formats seems unusual---what kind of data is contained in these files?
+
+(Astute observation)
+
+We have data import routines that expect a set of ASCII text files compressed in an archive, e.g. 
+connectivity weights, node centers and distances, describing a connectivity dataset. 
+
+Example (to be included):
+ A a connectivity dataset (connectome) may be uploaded as a zip folder containing the following files:
+- areas.txt
+- average_orientations.txt
+- info.txt
+- positions.txt
+- tract_lengths.txt
+- weights.txt
+
+The use of general compression formats means that preparing datasets for TVB is as simple as generating
+an archive with the correct ASCII files, in stark contrast to some of the other neuroscientific data 
+formats found elsewhere. We have documented these conventions in the user guide texts
+accompanying the VB. 
+
+We have added notes to the text to clear up this ambiguity.
+
+	11. P. 5, Sec 2.3.3: Why is RK4 "only suitable for the integration of single ... instances of the dynamic"?
+
+This has been fixed/clarified.
+Related to the differing convergence of the method for SDEs.
+
+(SK) There isn't an agreed stochastic version of rk4, and the different rates of convergence being one of the points that various attempts of creating a stochastic rk4 fail at. Also, it is an issue of the way we calculate time-delayed connections, because rk4 has an intermediate step in its algorithm, to use it correctly we'd need to either store the history at the mid steps as well or generate them as needed by using an interpolation on the history, either of which would lead to added complexity.
+
+
+	12. P. 6, Code 2: The main simulation loop gives the impression that the simulation is always only brought a small step forward and that the user then needs to pull the current state from the model for immediate or delayed plotting. There seems to be now "pushing" of data from the simulation directly to visualization. Is this correct, and if yes, why this seemingly cumbersome implementation.
+
+Following another reviewer request, we shall detail the main simulation algorithm to make dataflow
+model clearer.
+
+Responding to this particular question: the simulator must internally push raw simulation state to 
+each monitor at every time step, however not all monitors have the same periods, such that at each 
+time step, it is necessary to test whether one of the particular monitors set up for simulation 
+generated data or not. In the for loop of a scripted simulation, the user receives time series
+data as available, and then is free to do as he likes. One can imagine for example a numerical
+bifurcation analysis routine that wishes to track a bifurcation branch; such a routine will need
+the new simulation step data as soon as available, perhaps manipulate the state or parameters
+before continuing, et cetera. 
++ accessing data while the simulation is still running
++ smaller memory footprint (as at each step or certain number of steps data can be written stored to disk), both important and useful features when dealing with larger simulations  
+
+Hence the "cumbersome" implementation. When combinations of monitors such 
+as EEG & fMRI enter into play, such a dataflow is also advantageous because
+it decouples the "timestamps" on the data from different monitors.
+
+We have also changed the comment in Code 2 "Get recorded data" to "handle monitor output"
+to give a better idea of how this works.
+
+
+(PSL): I wasn't sure what his concern really was. Probably why we don't have something like run_simulation(pars) and get all the data at the end of a simulation. If so, the continuation feature could be highlighted explaining potential uses in stimulation paradigms such as feeding back 
+EEG signals. In this case having the possibility to modify some of the brain model components at runtime, supporting the current implementation.   
+
+
+	13. P 8. "Future work": I find it curious that the authors discuss work that apparently has been done already, is listed under "Future work". Shouldn't you rather update the body of the paper in the appropriate places?
+
+This has been fixed. (Place content in corresponding paragraphs. Many of the points addressed in this section were work in progress at the moment of writing the first version of this manuscript)
+
+
+	14. Fig 1: The "data types" box in the diagram appears misplaced. All other boxes repesent entities that either do something or are something (stored data), while datatypes are an abstract concept.
+
+Datatypes represent "active data" in the sense that, when the VB is configured with a database, the
+contents of the datatype instances are automatically persistent. 
+
+So, Datatypes actually contain/store data. They are indeed defining entities required to build the brain model and run the simulations.
+
+We have added a note as such to the text.
+(Consider modifying the figure the figure ?)
+
+	15. Fig 2: The figure supposedly shows work*flow*. Unfortunately, I cannot recognize any flow in the figure. The box "Operations board" is introduced only in the caption and not explained elsewhere.
+
+(good point, I (MW) do not have the figures and do not know what this is about)
+PSL: The caption has been reworded accordingly. This figure intends to represent working areas of TVB. As requested in by another reviewer, the text describing sub-working areas (e.g operation dashboard) has been expanded.
+
+
+	16. Fig 5: Why are some items boxed and others not?
+
+(idem.)
+PSL: The main idea was to highlight the difference between entities represented by datatypes and entities which are in the scientific library (monitors, models, simulator, noise, integrators). It has been improved.
+
+	17. Fig 5: You write that "[s]ignal propagation via local connectivity is instantaneous (no time delays)". How do you implement this without violation causality?
+
+SK: Finite propagation speed is possible on the cortical surface if a neural field model (including a Laplace-Beltrami operator) is used to describe the dynamics, and so in that way causality is automatically preserved. In the absence of finite propagation speed the activity doesn't really propagate along the cortical surface, it only has an influence (which is instantaneous) on the local neighbourhood, which depends on the footprint of the  imposed local connectivity. In this case the implementation doesn't explicitly prevent localised violation of causality, for example at the boundaries of regions, however, in principal it can be strictly avoided by having a local connectivity with a range less than the distance a signal can travel in one integration step.
+
+In practice, by using explicit local connectivity with neural masses, what we're essentially assuming is that the local connectivity is local enough (in a not really well defined way) and heavily damped enough (ie weak enough) that treating like it's instantaneous, or at least faster than our integration step, is an ok first approximation. It also means we can potentially investigate the impact of non-Gaussian local connectivity (neural fields implicitly represent Gaussian connectivity, that is, the Laplacian operator essentially amounts to differential form of a Gaussian local connectivity. 
+
+The causality problem, at least from my point of view, is mostly in relation to the interrelationship between the local and the long-range connectivity and because of that will be most prevalent at region boundaries. That is, nothing changes in the local connectivity at the boundaries, what changes is that even if we have a relatively compact local-connectivity but that isn't strictly local in the sense of being more compact than the propagation during an integration step, the  temporal relationship between the arrival of activity at nodes of one region from the neighbouring region become distorted.
+
+If the reviewer is concerned about the problems with a spatially extended simulation without finite propagation speed then the fields answer is the only relevant one. On the other hand, if the concern is on the relationship between delayed and effectively instantaneous signal propagation, then the heavily-damped/weak and very local kernels being an ok first approximation becomes relevant.
+
+PSL:Simulation algorithm description (?) (The activity coming from neighboring nodes is transformed by the local connectivity kernel and added (introduced in the local model equations) in the next integration step) --> Then the local delay changes since it is effectively our dt.  
+
+At the boundaries between two regions, the neighboring nodes of the first region would instantaneously influence the activity of the nodes in the second region, when in principle there should be a propagation speed and therefore the delayed activity of R1 should influence the current state of R2. This is the case in neural fields models. This also applies for the propagation of local activity within one region. 
+
+Regarding the extent of the local connectivity kernel. The average edge length of TVB demo surface is about 5mm, then having to constraint the local connectivity with such a small range, would amount to not having a local connectivity in order to avoid "violation of causality". 
+
+A local connectivity shorter than the typical (default) integration time step corresponds to about 0.5mm, local-connectivity that would strictly preserve causality would be achievabke with a high resolution surface.
+
+
+
+MW: Local connectivity kernels' tails are cut to zero such that no local connections are longer 
+than a centimeter or so. At the conduction velocities we believe to be relevant, 1 - 10 m/s,
+the delays are between 1 to 10 ms, a similar timescale to that of synaptic transmission. 
+Hence, we considered this to be an acceptable approximate in the current work, but this
+will be tested going forward.
+
+ In the case of time delays introduced by the long-range connectivity a history state 
+propagates the system from one state to the next and events or activity coming from other regions are delivered to their target nodes. This history array contains the information about the state of the system but the system X time step units before the current state. X depends on the white matter tract lengths (given by the structural connectivity matrix), the conduction speed and the time step size.  
+
+
+
+	18. Fig 7B: what is the purpose of shading the area between the curves?
+
+(a question for Paula)
+It was mainly to avoid having figure crowded with lines and represent the integration time steps between the lower and upper boundaries for both connectivity matrices. It has been simplified (or not, I like the shading).
+
+
+	19. Fig 9A: Why do some lines seem turquoise, while others are blue?
+
+(idem)
+Each line has indeed a different color since they represent distinct nodes (regions)  as given by the connectivity matrix. 
+
+	20. Fig 9B: "color scale correspond to the global variance"---global variance of what?
+
+Variance of all time points of all nodes of the first state variable (most likely). 
+
+This has been spelled out more clearly in the text. 
+
+	21. Fig 10: Again: "global variance" and "Variance of the Variance"---but of what?
+
+This has been spelled out more clearly in the text. 
+. Global variance.  Having an output array of dimensions [time points x nodes], all the time-series  are zero-centered and then the variance is computed over all data points contained in this array. 
+
+
+	22. Fig 11: Something seems to have been mixed up towards the end of the caption, there is no clear description of (B). It should probably also be "damped", not "dumped oscillations".
+
+Correct, this has been corrected.
+
+	23. Fig 12: You might want to spell out "MSE" in the caption.
+
+Fixed.
+
+
+	Independent Review Report, Reviewer 1
+
+	GENERAL EVALUATION
+	Does this manuscript conform to the style guidelines for Methods articles, described below? If not, please contact the Editorial Office.
+	Methods articles present a cutting-edge technology and/or software that opens new avenues for experimental investigation of important issues in a field. Methods should include in the form of a brief statement: the experimental objectives, the limitations of current techniques, and a detailed protocol of the new technique. In addition, there should be some data 
+	Yes
+
+	Main Message:
+	Describe the method presented in this article.
+	First, my excuses to the authors for my delayed review. I had a severe flu that saw me in bed with high fever for over a week, and I had some other pressing personal issues to deal with as well. I will try to make up for this by responding rapidly to future revisions...
+
+	The paper by Sanz Leon reports the development of an important software package for the simulation of full brain networks based on neural mass/field models. While not the first such software, it certainly is a particularly comprehensive and flexible approach.
+
+	All in all I believe that this article only needs minor updates to be ready for publications, and I congratulate the authors on a very interesting software development.
+
+Thank you for your kind comments and constructive criticism.
+
+	Ratings:
+	Quality of the research:
+	8
+	Quality of the presentation of the method:
+	8
+	Novelty of the method:
+	7
+	Potential significance of the method:
+	9
+	Quality of the figure(s):
+	7
+	Quality of the writing:
+	8
+	SPECIFIC EVALUATION
+	Fundamental Flaws:
+	Are there any fundamental flaws in the method? If yes, please specify.
+	No
+
+	Expert Authority:
+	Is the method described accurately enough to be reproducible?
+	No
+	This is inevitable, given the complexity of the software package. However, some details could be added.
+
+The package is freely availabe and open source.
+
+	Page 2, "In TVB, the tract-lengths matrix of the demonstration connectivity dataset is symmetric ... On the other hand, the weights matrix is asymmetric ..." Is this essential to the design, or just currently the case? In particular, while in most cases one would expect that connection distances A->B are the same as B->A, this need not be the the case.
+
+This is just currently the case, as the methods used to measure such data do not yet
+yield asymmetric tract length matrices.
+
+PSL: On the symmetry of tract lengths matrix. 
+	
+Structural connectivity is given by both the adjacency matrix, or weighted connectivity matrix in the case a scalar map has been used to define the strength of the connections, and the white matter fibre lengths. Since diffusion is a symmetric process and the connectomes derived from diffusion tensor imaging are indeed symmetric.
+
+However, this clarification was made specifically for TVB's demonstration connectome dataset, which is a fusion of DTI derived and the CoCoMac database, the latter being a directed connectivity matrix (graph) thanks to the tracing studies used to determined the connections between regions. 
+
+However, this is not a limitation or modelling constraint. The implementation for weights and tract-lengths are full node x node matrices without any symmetry restrictions.
+
+
+
+
+	Page 2, "Two types of brain connectivity are distinguished in TVB, that is region-based and surface-based connectivity. ..." I take it that these approaches are *exclusive* of each other, that is to say, either the (computational) nodes represent brain regions, or they represent much smaller units, but not both concurrently? If so, then this limitation should be pointed out clearly. If not, then the authors need to explain how these different scales are being interfaced.
+
+(astute observation)
+
+Details of how these two levels interact in the presence of a surface connectivity have
+been added to this section.
+
+PSL: On the types of brain connectivity that are distinguished in TVB.
+
+In surface-based simulations the brain network model is represented a much fine scale since the cortex is represented by a
+two dimensional surface (triangular mesh surface) whose vertices represent the nodes of the network. In this case, many nodes belong to a specific brain region. The edges of the network represent a distance of the order of millimeters. The influence of delayed activity coming from 
+other brain regions is still added to the model, that is the long-range connectivity (or long-range coupling). There is a effectively a surjective function that maps vertices of a surface to regions (RegionMapping), so all the nodes belonging to one region will receive the (averaged) delayed activity of the nodes from another region and the strength of this connection will be given by weights in the connectivity matrix (connectome). So, at the surface level both types of connectivity, local- and long-range, coexist.
+
+The connectome itself can be used as a coarser representation of the brain network (region-based simulations). In this case we lose one level of detail, that is the local connectivity is not represented and each node of the network corresponds to one brain region as defined in the connectivity matrix, while the edges represent white matter fibres in the order of a few cm. 
+
+
+
+
+	Page 2, "TVB has been principally built in the Python programming language..." Can the authors comment on the speed limitations this may introduce, as compared to using for example C? (Actually, on reading further this is discussed towards the end. But a brief mention here would be in order.)
+
+Native code integrators yield 40% improvement in simulation speed, becuase the algorithms, especially 
+in the case of surface-based simulations, are memory bound. Note that very little of
+the original Python code is replaced in such a scenario, and the integration routine is interfaced
+with the rest of the package. 
+Recent advancements in Python numerical software (Continuum Analytics' "numba" package) have brought
+just-in-time compilation to numerical code, which, when applied in our simulator code base, will 
+likely shrink the 40% gap between 
+
+SK: As the heavily numeric components make use of libraries which are built against highly optimised math libraries (mkl on intel), the performance hit for the high level language isn't as great as it might initially seem. With current active development aimed at improving both Python's speed as well as specific improvements for high performance computing (eg. PyPy, Numba, Blaze, Theano, etc), the difference between compiled languages and Python should continue to shrink. 
+
+
+(PSL: A naive response)
+High-performance is desired in a scientific software tool. However, the choice of Python was mainly due to its flexibility to implement modelling paradigms, the possibility to expand the different analysis techniques, read sources of data, and plug/connect other neuroscientific modules also written in Python. 
+
+There is a trade-off between performance (wrt simulation execution times, memory usage) and readability of the implementation structure, clean separation of the modelling components, etc.
+
+
+
+We have added appropriate notes to the text.
+
+	Page 3, "Based on the usage scenarios and user’s level of programming knowledge, two user profiles are represented: a graphical user (G-user) and scripting user (S-user)." Add a reference to Figure 1 somewhere here. Provide a discussion to what extent G-user and S-user have the same abilities to interact with the system, or not. Does a S-user have more control, or just different means of control?
+
+S-users have different extents of control over different parts of the system. S-user typically will not
+find it easy to manipulate the database, users or projects, or use the interactive visualizers designed
+for the graphical user interface, though it is in principal possible. 
+
+G-users will find it difficult to perform intricate, repeated or algorithm manipulations of simulations
+and data, because of the nature of graphical interfaces.
+
+
+We have added some detail on this contrast to the text. 
+
+	Page 3, "users are required to have a high definition monitor (at least 1600 x 1000 pixels)" Why is this necessary?
+
+This is a recommendation based on the about of detail that can be present in the visualizations, for
+example a cortical surface is rendered as many thousands of polygons. When the polygonal 
+density exceeds the resolution of the screen, the fidelity of the visualization is lost.
+
+(LD): We need a big resolution for the web interface of TVB because some of the pages (the page with bursts/simulator, the Large Scale Connectivity page) contain a lot of information, and that is a resolution for which we managed to make our User Interface acceptable in regard with displaying all the needed information and also maintaining an acceptable size for the controls (e.g. buttons big enough to click / touch easily). It is normal in the world of web design to impose a limit in resolution. **  I will ask Michael tomorrow about this limit, he might be able to give a more satisfactory answer (he is actually the one imposing this limit).
+
+Again this is not a hard dependency of the software, just a recommendation; the text has been
+updated to reflect this.
+
+	Page 4, "The following formats are supported: NIFTI-1 (volumetric time-series), GIFTI (surfaces), CFF (connectome file), ZIP (connectivity, sensors, surfaces), BZIP2 (region mapping) and text files." ZIP and BZIP2 are compression formats. It is hence meaningless to mention them, without saying what they compress. Explain what the actual underlying standards for connectivity, sensors, surfaces, and region mapping are (e.g., home-baked XML?), then you can mention that they are (B)ZIPped.
+
+They compress conventionally organized ASCII files representing data such as the reviewer mentioned.
+
+We have noted this, given an example, and pointed the reader towards the user guide where said
+conventions are well-documented.
+
+	Page 4, "Then for each operation, one folder per operation is created containing a set of .h5 files generated during that particular operation, and one XML file describing the operation itself." How much data is a user generating per command on average, and is there any kind of "garbage collection". Will a user "playing around" with the system generate massive data files which are largely superfluous (because they just track user moves superceded by later ones)?
+
+(PSL): I suppose that there is not an average amount of data generated per operation, it largely depends on the parameters of the simulation and the subsequent operations will depend on the output simulated data (time-series). Users can delete data from the GUI accessing to the a particular dataset menu. 
+
+I guess that he wants to know how much heavier the files are by adding XML files per operation or adding metadata to track the user history. 
+In any case, what can be considered as superflous data depends on the users. 
+
+(LD): There is no average size for the generated data, but maybe the text below (from one of the manuals of TVB will help the reviewer to get an idea of how much data we generate). The size mentioned below refers to the H5 files. 
+The XML file attached to each operation are extremely small (1 - 2 KB) , containing mainly a map with the user-selected input parameters for that operation, to help us (in case of import export or data-lost) to reconstruct the Database indexes. We have no automated mechanism of Garbage Collection in TVB, but the user can remove using controls from TVB interface data that she no longer needs; in that case any link/file/xml related to the data is dumped, and disk space freed. 
+
+ 	     - A default region level simulation with length 1000 ms takes 
+	      approximatively 1 MB of disk space.
+	    - A surface level simulation, with Local Connectivity pre-computed, 
+	      Raw monitor and length of 10 ms takes 280 MB.
+
+Typical per-operation data is not high for typical region-based simulations (generated GBs of data may
+take hours on a typical workstation). 
+
+The VB framework also implements a self-imposed data storage limit, where old operations that exceed
+the limit will be deleted??
+
+
+	Page 4/5, "2.3.2 Population Models A set of default mesoscopic neural models are defined in TVB’s MODELS." Can the authors explain what is involved in adding other models to their simulation software? In particular, what format do the "model modules" take, and how is their availability registered in the main software?
+
+We have added a simple model implementation to the supplementary materials.
+Additionally , there is a template for adding a new model available in the  scientific library under docs/, as well as all the untested models can survive and be tested by others who might be interested in them. 
+
+The template explaining how to include a new model in TVB, can be found in the code available from the public repository in github. 
+
+Brain log:
+
+A Model have maoinly consist of:
+- parameters with a default value and ranges, labels, description.
+- state variables and their ranges which will be used to set random initial conditions. 
+- state variable equations
+- coupling variables (ie, the variable describing the activity that will propagate through the long-range coupling and where the stimulation at the same time the state variable to which input stimuli will be added)
+- variables of interest for the monitors. (the state variables used in the forward solutions of the biophysical monitor depend both on the model and the monitor). A default is giving thinking that the neural activity will be projected onto EEG space.
+- derived parameters equations. parameters derived from the "configurable parameters" of the model.
+
+Add figure ? class_models.svg?
+
+
+	Page 6, "The biophysical Monitors instantiate a physically realistic measurement process on the simulation, such as EEG, MEG, or BOLD." What aspects of the underlying models are considered to drive the signal expression, i.e., what model state variables serve as inputs to the EEG/MEG lead field projections and the BOLD hemodynamics, respectively? Is this fixed or somehow specified?
+
+This remains an open question, one which the user or modeler will need to justify. However,
+in most neural models have a variable modeling potential, which serves as a biophysical basis 
+for the monitors. 
+
+The underlying sources of BOLD haemodynamics are less well known, but given the disparate time scale
+separation between the neural dynamics and the haemodynamic response function, it may (depending on
+the goals of the user) be reasonable to ignore such concerns. 
+
+PSL
+Biophysical Monitors and State Variables (Variables of Interest)
+
+See above.
+Which state variables should be used depends both in the model and the biophysical space where the neural activity described by the model will be projected onto (MEG, EEG, BOLD). By default the ones specified by the model are used, however they can be overridden by the user. 
+
+current implementation
+
+EEG
+specified as variables of interest and modes (when working with mutimodal models) are summed to get a single source of activity. 
+	
+MEG
+the same applies here
+
+
+BOLD 
+no underlying assumption. The model's specifications are used.
+
+NOTE: Same discussion for long and and local connectivity and stimulation wrt VoIs.
+
+
+
+	Page 6,"We make the following estimates: it takes in average 16 seconds to compute one second of brain network dynamics" The detail here should not be shoved into the Figure caption, but discussed in the main text. Linear scaling is hardly surprising if this is a one-core job with integration detail directly linked to the temporal scale (i.e., noise appearing at all temporal levels). The scaling shown if Fig 7B apparently provides no "stress test" of the computational framework at all. The interesting bit is of course rather where performance runs into a wall as the number of nodes is increased (256, 512, ...?). Furthermore, we have no indication here about the performance for a truly large number of nodes potentially using a parallel cluster. How does the system handle tens of thousands of nodes, with potentially millions of connections?
+
+Following the feedback of another reviewer, we have added outline of the time and space complexity of the
+core simulation algorithm, to determine theoretical limits on performance. For large numbers of nodes, the
+algorithm is memory bound, and run time is determined entirely by the bandwidth between the CPU and main
+memory, thanks to use of libraries such as 'numexpr' which regularly attain the theoretical limits of 
+the memory bus.
+
+At the default, low-resolution cortical surface, with the default local connectivity kernel, there are 
+~17k nodes with 2.5 % nonzero connections or roughly 6.8 million local connections. In our recent tests
+on Intel's recent server-grade 16-core Xeon CPU and Intel's Math Kernel Library (MKL), 1 second of surface
+simulation requires  ~150 s of wall time for the generic 2D oscillator. Despite 16 available cores, MKL, 
+which chooses at runtime how many cores to use, uses only 4 - 6 cores. This may be due partially to our
+use of the sparse matrix-vector multiply routine from SciPy, itself based on ARPACK, a Fortran 77 library.
+
+As the number of nodes decreases (or the conduction velocity increases thus decreasing the amount of delayed
+state data to store in memory), a nonlinear effect of staying in the CPU cache lowers the runtime
+considerably. Increasing the number of nodes increases runtime a bit above linearly until the memory
+limits of the machine are reached. 
+
+For the moment, it is not clear that an MPI implementation on conventional hardware will yield a 
+significant improvement in runtime, and it would introduce considerable complexity to the simulator
+architecture. 
+
+We have added notes thereof in the text and supplementary materials where appropriate.
+
+	Page 7, "Such a dynamic approach leads toward an adaptive modeling scheme where stimuli and other factors may be regulated by the ongoing activity." This requires that the stopping, modifying and restarting the simulation can be done automatically, rather than by user interference. Is that the case?
+	Are relevant methods of other authors mentioned? If not, please specify the methods the author should incorporate.
+
+This use case is currently supported in Python scripting, where the user iteratively handles 
+the data as it becomes available and can perform dynamic updating of parameters, stimuli, et cetera.
+
+
+PSL Continuation capability
+
+Current implementation allows to retrieve simulated data as it's being produced. When a data point is available after each integration time step ( or a number of integration time steps for monitors other than the Raw monitor) it can be immediately accessed, processed or stored and potentially being fed back (under the form of a stimulus or any other modification modellers may require) at each integration time step without actually stopping the simulation. As long as the parameters being modified are not the ones determining the spatiotemporal structure/dimensionality of the input and output (integration time step, transmission speed, simulation length, number of nodes, number of state variables, number of modes)
+
+However, no prepackaged tools are currently provided for automating this process which we would 
+consider to be very dependent on the details of the user's goals.
+
+	No
+	Page 1, "In particular, cognitive and clinical neuroscience employs...": References are only provided for EEG, not for sEEG, MEG and fMRI. Add some references providing overviews over these neuroimaging techniques.
+
+We have added references for these modalities.
+
+	Page 1. The introduction lacks discussion and proper references to works in this field which are more directly comparable than simply generic neural field/mass approaches. At a minimum, the authors should mention and briefly discuss the following works from five key groups:
+
+	Babajani A, Nekooei MH, Soltaninan-Zadeh H (2005) Integrated MEG and fMRI model: Synthesis and analysis. Brain Topogr 18:101–113
+	Babajani A, Soltaninan-Zadeh H (2006) Integrated MEG/EEG and fMRI model based on neural masses. IEEE Trans Biomed Eng 53:1794–1801
+	Babajani-Feremi A, Soltaninan-Zadeh H, Moran JE (2008) Integrated MEG/fMRI model validated using real auditory data. Brain Topogr 21:61–74
+	Babajani-Feremi A, Soltaninan-Zadeh H (2010) Multi-area neural mass modeling of EEG and MEG signals. NeuroImage 52:793–811
+
+	Riera JJ, Aubert E, Iwata K, Kawashima R,Wan X, Ozaki T (2005) Fusing EEG and fMRI based on a bottom-up model: Inferring activation and effective connectivity in neural masses. Phil Trans R Soc B 360:1025–1041
+	Riera JJ, Jimenez JC, Wan X, Kawashima R, Ozaki T (2007) Nonlinear local electrovascular coupling. II: From data to neuronal masses. Hum Brain Mapp 28:335–354
+
+	Sotero RC, Trujillo-Barreto NJ, Iturria-Medina Y, Carbonell F, Jimenez JC (2007) Realistically coupled neural mass models can generate EEG rhythms. Neural Comput 19:478–512
+	Sotero RC, Trujillo-Barreto NJ (2008) Biophysical model for integrating neuronal activity, EEG, fMRI and metabolism. NeuroImage 39:290–309
+	Valdes-Sosa PA, Sanchez-Bornot JM, Sotero RC, Iturria-Medina Y, Aleman-Gomez Y, Bosch-Bayard J, Carbonell F, Ozaki T (2009) Model driven EEG/fMRI fusion of brain oscillations. Hum Brain Mapp 30:2701–2721
+
+	Deneux T, Faugeras O (2010) EEG-fMRI fusion of paradigm-free activity using Kalman filtering. Neural Comput 22:906–948
+
+	Bojak I, Oostendorp TF, Reid AT, Kotter R (2010) Connecting mean field models of neural activity to EEG and fMRI data. Brain Topogr 23:139–149
+	Bojak I, Oostendorp TF, Reid AT, Kotter R (2011) Towards a model-based integration of co-registered EEG/fMRI data with realistic neural population meshes. Phil Trans R Soc A 369:3785-3801
+
+	All of these works propose comparable approaches as far the computational core is concerned, indeed, in several ways perhaps superior ones. However, they lack the comprehensive approach and the flexibility that the authors here propose. This needs a paragraph or two of discussion.
+
+We have reviewed this literature and integrated it into the discussion of this work.
+
+	Page 2, "Mesoscopic dynamics describe..." This paragraph lacks proper references to the vast array of previous work in this field, starting with Beurle (1956). I would recommend here reference to some recent reviews, in particular the following:
+
+	Deco GR, Jirsa VK, Robinson PA, Breakspear M, Friston KJ (2008) The dynamic brain: From spiking neurons to neural masses and cortical fields. PLoS Comput Biol 4:e1000092
+	Coombes S (2010) Large-scale neural dynamics: Simple and complex. NeuroImage 52:731–739
+	Bressloff PC (2012) Spatiotemporal Dynamics of Continuum Neural Fields. J Phys A 45:033001
+	Liley DTJ, Foster BL, Bojak I (2012) Co-operative populations of neurons: mean field models of mesoscopic brain activity. In: Computational Systems Neurobiology. Ed. N. Le Novère. Dordrecht: Springer. pp. 315–362.
+
+We have reviewed this literature as well, adding to the text where appropriate.
+
+	Page 3, "The data format used in TVB is based on the HDF5 format (The HDF Group. Hierarchical data format version 5)" Provide a proper reference, e.g., to some official description of the standard (possibly a webpage).
+	Are methods of other authors accurately presented and interpreted?
+	No
+	Page 7, "TVB is the first neuroinformatics tool of this type and has been developed by integrating concepts from theoretical, computational, cognitive and clinical neuroscience." The authors need to be a bit more cautious. This is perhaps the first tool of this type which aims at general accessibility to the scientific community and hopes to support general analysis approaches. Tools of this type have been built by several groups before, but targeted more at their own research question with less ambition to be widely used. Previous works needs to be mentioned here properly again, see comment above.
+	Is the method based on high quality data? If not, please describe the problems with the data on which the method is based.
+	Yes
+
+	Ethical Standards:
+	Is the work ethical in your opinion?
+	Not Applicable
+
+	Was the research carried out in accordance with established animal use practices?
+	Not Applicable
+
+	Is any use of human subjects performed according to acceptable standards?
+	Not Applicable
+
+	Complementary Data:
+	Should an accession number of nucleotide/amino acid sequences be included?
+	Not Applicable
+
+	Should an accession number for microarray data be included?
+	Not Applicable
+
+	Biosecurity Standards:
+	Does the article describe experiments using a select agent or toxin?
+	No
+
+	Is it possible that this manuscript contains an NSABB-defined experiment of concern?
+	No
+
+	Abstract:
+	Is the abstract written in a clear and comprehensive way?
+	Yes
+
+	Article Length:
+	A Method Article should not exceed 12,000 words. Should any part of the article be shortened? If yes, please specify which part should be shortened.
+	No
+
+	Language and Grammar:
+	Is the language and grammar of sufficient quality?
+	Yes
+
+	Should the paper be sent to an expert in English language and scientific writing?
+	No
+
+	OTHER COMMENTS
+	Please add any further comments you have regarding this manuscript.
+	Page 3, "The distribution packages for TVB ... There is an active Users group of TVB hosted in GoogleGroups ..." This would be a convenient place to introduce relevant links for downloading the package and discussing it, respectively.
+
+We have centralized the links to these resources here in the text as suggested.
+
+	Figure 2: Bring the dashed double-sided curved arrow to the foreground, so that its ends do not get covered.
+
+Done. The figure has been slightly modified. It represents the working areas of the web interface. 
+The user's manual is available and contain more details about the usage and relationships between these pages.
+
+
+	Page 4, "As an example of the flow of data through TVB using Datatypes." Fragement of a sentence, please correct.
+
+Done
+
+	Figures 3,4  are not mentioned/explained in the text. Please provide at least one paragraph in the main text per figure, appropriately placed. Please resort the Figures according to their order of reference in the main text (Fig. 8 appears early).
+
+We have added appropriate texts and ordered the figures as requested.

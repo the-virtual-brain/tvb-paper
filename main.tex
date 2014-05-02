@@ -1,0 +1,2078 @@
+%!TEX TS-program = pdflatex                                                    %
+%!TEX encoding = UTF8                                                          %
+%!TEX spellcheck = en-US                                                       %
+%------------------------------------------------------------------------------%
+% to compile use "latexmk --pdf main.tex"                                      %
+%------------------------------------------------------------------------------%
+% to count words 
+% "pdftotext main_nofigs_nocaptions.pdf - | egrep -e '\w\w\w+' | iconv -f ISO-8859-15 -t UTF-8 | wc -w"
+% -----------------------------------------------------------------------------%
+
+\documentclass{bioinfo}
+\usepackage{url}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage[pdftex]{graphicx} 
+%\usepackage{graphics}
+%\usepackage{hyperref}
+\usepackage{float}
+\floatplacement{figure}{H}
+\usepackage{booktabs}     % nice tables
+\usepackage{tabularx}      % even nicer tabular environments 
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+%\usepackage{multicol}
+\usepackage{listings}
+\usepackage{tikz,times}
+\usepackage{courier}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{arrows,positioning}
+\usepackage{xcolor}
+\usepackage[font=bf]{subfig}
+\usepackage[finalnew]{trackchanges} % track changes from authors.
+%\usepackage{sectsty}
+%\sectionfont{\normalsize\bfseries}
+%\usepackage[labelfont=bf]{caption}
+%\usepackage{endfloat} %place figures at end of document
+%------------------------------------------------------------------------------%
+%\captionsetup{
+%%format = hang,                % caption format
+%labelformat = simple,          % caption label : name and number
+%labelsep = period,             % separation between label and text
+%textformat = simple,           % caption text as it is
+%justification = justified,     % caption text justified
+%singlelinecheck = true,        % for single line caption text is centered
+%font = {up,singlespacing},     % defines caption (label & text) font
+%labelfont = {bf,footnotesize}, % NOTE: tiny size is not working
+%textfont = footnotesize,
+%%width = \textwidth,           % define width of the caption text
+%skip = 1ex,                    % skip the space between float and caption
+%listformat = simple,           % in the list of floats, label + caption
+%}
+
+%------------------------------------------------------------------------------%
+%\hypersetup{
+%    bookmarks=true,         % show bookmarks bar?
+%    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+%    pdftoolbar=true,        % show Acrobat’s toolbar?
+%    pdfmenubar=true,        % show Acrobat’s menu?
+%    pdffitwindow=false,     % window fit to page when opened
+%    pdfstartview={FitH},    % fits the width of the page to the window
+%    pdftitle={TheVirtualBain},    % title
+%    pdfauthor={PSL},        % author
+%    pdfsubject={ProposedArticle},   % subject of the document
+%    pdfcreator={paupau},    % creator of the document
+%    pdfnewwindow=true,      % links in new window
+%    colorlinks=true,       % false: boxed links; true: colored links
+%    linkcolor=red,          % color of internal links (change box color with linkbordercolor)
+%    citecolor=blue,        % color of links to bibliography
+%    filecolor=magenta,      % color of file links
+%    urlcolor=blue           % color of external links
+%}
+%-----------------------------------------------------------------------
+%\usepackage{subcaption}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                             New and renew commands                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% define authors
+\addeditor{PSL}
+\addeditor{MW}
+\addeditor{VJ} 
+\addeditor{SAK}
+
+\renewcommand{\lstlistingname}{Code}
+\renewcommand{\thesubfigure}{\Alph{subfigure}}
+\newcommand{\inputTikZ}[2]{%
+\scalebox{#1}{\input{#2}}}
+\newcommand*{\h}{\hspace{5pt}}   % for indentation
+\newcommand*{\hh}{\h\h}          % double indentation
+\newcommand{\TVB}{\textit{TheVirtualBrain }}
+\newcommand*{\tvbmodule}[1]{{\textsc{#1}}}          % scientific library modules
+\newcommand*{\tvbdatatype}[1]{\textbf{\emph{#1}}}   % datatypes in "datatypes"
+\newcommand*{\tvbclass}[1]{{\ttfamily\emph{#1}}}    % classes either in simulator mods or datatypes
+\newcommand*{\tvbmethod}[1]{{\textsf{#1}}}          % methods
+\newcommand*{\tvbattribute}[1]{{\ttfamily{#1}}}     % attributes
+\newcommand*{\tvbtrait}[1]{{\ttfamily{#1}}}         % traited types
+
+% please please trackchanges ignore these commands and make my life easy.
+\tcregister{\tvbmodule}{1} 
+\tcregister{\tvbdatatype}{1} 
+\tcregister{\tvbclass}{1} 
+\tcregister{\tvbmethod}{1} 
+\tcregister{\tvbattribute}{1} 
+\tcregister{\tvbtrait}{1} 
+\tcregister{\TVB}{0}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                            Colors and graphics                             %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{palegreen}{HTML}{DAFFDA}
+\definecolor{lightgray}{rgb}{0.15,0.15,0.15}
+\definecolor{orange}{HTML}{FF7300}
+\DeclareGraphicsExtensions{.jpg,.pdf,.png,.tiff}%,.mps,.bmp
+\graphicspath{{figures/}}
+ 
+%##--------------------------------------------------------------------------##%
+%##                               START HERE                                 ##%
+%##--------------------------------------------------------------------------##%
+\copyrightyear{}
+\pubyear{}
+
+\begin{document}
+\lstset{language=Python, 
+        caption=b, 
+        breaklines=true, 
+        basicstyle=\bf\tiny\ttfamily, 
+        stringstyle=\color{magenta}
+        } 
+\firstpage{1}
+
+%%  Authorship and Title
+\title[TVB]{The Virtual Brain: a simulator of primate brain network dynamics}
+\author[Sanz Leon {et~al}]{Paula Sanz Leon\,$^{1,*}$,
+        Stuart A. Knock\,$^{2}$, 
+        M. Marmaduke Woodman\,$^{1}$,
+        Lia Domide\,$^{3}$, 
+        Jochen Mersmann\,$^{4}$,
+        Anthony R. McIntosh \,$^{5}$ and  
+        Viktor Jirsa\,$^{1}$\footnote{to whom correspondence should be addressed: paula.sanz-leon@univ-amu.fr, 
+        viktor.jirsa@univ-amu.fr}}
+
+\address{$^{1}$ Institut de Neurosciences des Syst{\`e}mes, 27, Bd. Jean Moulin, 13005, Marseille, France.\\
+         $^{2}$ BrainModes Group, Department of Neurology, Charit{\'e} University of Medicine, Berlin, Germany.\\
+         $^{3}$ Codemart, 13, Petofi Sandor, 400610, Cluj-Napoca, Romania.\\
+         $^{4}$ CodeBox GmbH, Hugo Eckener Str. 7, 70184 Stuttgart, Germany.\\
+         $^{5}$ Rotman Research Institute at Baycrest, Toronto, M6A 2E1, Ontario, Canada\\
+        }
+
+\history{}
+
+\editor{}
+
+\maketitle
+
+%##--------------------------------------------------------------------------##%
+%##                               ABSTRACT                                   ##%
+%##--------------------------------------------------------------------------##%
+
+
+\begin{abstract} \section{} % abstract < 2000 characters including spaces. 
+We present TheVirtualBrain (TVB), a neuroinformatics platform for full brain
+network simulations using biologically realistic connectivity. This simulation
+environment enables the model-based inference of neurophysiological mechanisms
+across different brain scales that underlie the generation of macroscopic
+neuroimaging signals including functional MRI (fMRI), EEG and MEG. Researchers
+from different backgrounds can benefit from an integrative software platform
+including a supporting framework for data management (generation,
+organization, storage, integration and sharing) and a simulation core written
+in Python. TVB allows the reproduction and evaluation of personalized
+configurations of the brain by using individual subject data. This
+personalization facilitates an exploration of the consequences of pathological
+changes in the system, permitting to investigate potential ways to counteract
+such unfavorable processes. The architecture of TVB supports interaction with
+MATLAB packages, for example, the well known Brain Connectivity Toolbox. TVB
+can be used in a client-server configuration, such that it can be remotely
+accessed through the Internet thanks to its \change[PSL]{web based}{web-based}
+HTML5, JS and WebGL graphical user interface. TVB is also
+accessible as a standalone cross-platform Python library and application, and
+users can interact with the scientific core through the scripting interface
+IDLE, enabling easy modeling, development and debugging of the scientific
+kernel. This second interface makes TVB extensible by combining it with other
+libraries and modules developed by the Python scientific community. 
+In this article, we
+describe the theoretical background and foundations that led to the
+development of TVB, the architecture and features of its major software
+components as well as potential neuroscience applications.
+    
+\section{Keywords:} connectivity, connectome, neural mass, neural field, 
+time delays, full-brain network model, python, virtual brain, large-scale 
+simulation,  web platform, GPUs
+\end{abstract}
+
+%##--------------------------------------------------------------------------##%
+%##                               INTRO                                      ##%
+%##--------------------------------------------------------------------------##%
+
+\section{Introduction}
+    
+    % micro vs macro
+    Brain function is thought to emerge from the interaction of large numbers
+    of neurons, under the spatial and temporal constraints of brain structure
+    and cognitive demands. Contemporary network simulations mainly focus on
+    the microscopic and mesoscopic level (neural networks and neural masses
+    representing a particular cortical region), adding detailed biophysical
+    information at these levels of description while too often losing
+    perspective on the global dynamics of the brain. On the other hand, the
+    degree of  assessment of global cortical dynamics,  across imaging
+    modalities, in human patients and research subjects has  increased
+    significantly in the last few decades. In particular, cognitive and
+    clinical neuroscience employs imaging methods of macroscopic brain
+    activity such as intracerebral measurements, stereotactic Encephalography
+    (sEEG) \citep{Ellenrieder_2012}, Electroencephalography (EEG) 
+    \citep{Nunez_1981book, Nunez_1995book, Niedermeyer_2005}, 
+    Magnetoencephalography (MEG) \citep{Haemaelaeinen_1992, Haemaelaeinen_1993, 
+    Mosher_1999} and
+    functional Magnetic  Resonance Imaging (fMRI) \citep{Ogawa_1993, Ogawa_1998, 
+    Logothetis_2001} to assess brain dynamics and
+    evaluate diagnostic  and therapeutic strategies. Hence, there is a strong
+    motivation to develop  an efficient, flexible, neuroinformatics platform
+    on this macroscopic level of brain organization for reproducing and
+    probing the broad repertoire of  brain dynamics, enabling quick data
+    analysis and visualization of the  results.
+    
+    TVB is our response to this need. On the one hand, it
+    provides a general infrastructure to support multiple users handling
+    various kinds of empirical and simulated data, as well as tools for
+    visualizing and analyzing that data, either via internal mechanisms or by
+    interacting with other computational systems such as MATLAB. At the same
+    time it provides a simulation toolkit to support a top-down modeling
+    approach to whole brain dynamics, where the underlying network is defined
+    by its structural large-scale connectivity and mesoscopic models that govern
+    the nodes' intrinsic dynamics. The interaction with the dynamics of all
+    other network nodes happens through the connectivity matrix via specific
+    connection weights and time delays, where the latter make a significant
+    contribution to the biological realism of the temporal structure of
+    dynamics.
+    
+    Historically, \citet{Jirsa_2002} first demonstrated neural field modeling on
+    a spherical brain hemisphere employing EEG and MEG forward solutions to
+    obtain simulation imaging signals. In this work, homogeneous
+    (translationally invariant) connectivity was implemented along the lines of
+    \citet{Jirsa_1996,Jirsa_1997, Bojak_2010} yielding a neural field equation,
+    which has its roots in classic works
+    \citep{Wilson_1972,Wilson_1973,Nunez_1974,Amari_1975, Amari_1977}. At that
+    time more detailed large-scale connectivity of the full primate brain was
+    unavailable, hence the homogeneous connectivity scaled up to the full brain
+    was chosen as a first approximation \citep{Nunez_1974}. The approach proved
+    successful for the study of certain phenomena as observed in large-scale
+    brain systems including spontaneous  activity \citep{Breakspear_2003,
+    Freyer_2011,Wright_1995,Rowe_2004,Robinson_2001, Robinson_2003}, evoked
+    potentials \citep{Rennie_1999, Rennie_2002}, anesthesia \citep{Liley_2005},
+    epilepsy \citep{Breakspear_2006}, sensorimotor coordination
+    \citep{Jirsa_1996, Jirsa_1997} and more recently, plasticity \citep{Robinson_2011} (see \citet{Deco_2008a} and
+    \citet{Jirsa_2004} for a review).
+    
+    Careful review of this literature though shows that these models mostly
+    emphasize the temporal domain of brain organization, but leave the
+    spatiotemporal organization untouched. This may be understood by the fact
+    that the symmetry of the connectivity imposes constraints upon the range
+    of the observable dynamics. This was pointed out early
+    \change[PSL]{on}{by }\citet{Jirsa_2002}
+    and a suggestion was made to integrate biologically realistic DTI based
+    connectivity into full brain modeling efforts. Large scale brain  dynamics
+    are basically expected to reflect the underlying anatomical connectivity
+    between brain areas \citep{Deco_2011, Bullmore_2009}, even though
+    structural connectivity is not the only constraint, but the transmission
+    delays play an essential role in  shaping the brain network dynamics also
+    \citep{Jirsa_2000, Ghosh_2008, Knock_2009, Jirsa_2010b}. Recent studies
+    \citep{Pinotsis_2012} have systematically investigated the degree to which
+    homogeneous approximations may serve to understand realistic connection
+    topologies and have concluded that homogeneous approximations are more
+    appropriate for mesoscopic descriptions of brain activity, but less well
+    suited to address full brain network dynamics. All this
+    \change[PSL]{underwrites}{underscores} the need to incorporate realistic
+    connectivity into large scale brain network models. Thus the simulation
+    side of TVB has evolved out of a research program seeking to identify and
+    reproduce realistic  whole brain network dynamics, on the basis of
+    empirical connectivity and neural field  models \citep{Jirsa_2010,
+    Deco_2011}.
+
+  \subsection{Modeling}
+
+    In line with these previous studies, TVB incorporates a biologically
+    realistic, large-scale connectivity of brain regions in the primate brain.
+    Connectivity is mediated by long-range neural fiber tracts as identified by
+    tractography based methods \citep{Hagmann_2008, Honey_2009, Bastiani_2012},
+    or obtained from CoCoMac neuroinformatics database \citep{Koetter_2004,
+    Koetter_2005, Bakker_2012}. In TVB, the  tract-lengths matrix of the
+    demonstration connectivity dataset is symmetric due to the fiber detection
+    techniques used to extract the information being insensitive to
+    directionality. On the other hand, the weights matrix is asymmetric as it
+    makes use of directional information contained in the tracer studies of the
+    CoCoMac database. The symmetry (or lack thereof) is neither a modeling
+    constraint nor an imposed restriction on the weights and tract-length matrices.
+    Such specifics is inherent to the connectivity demonstration dataset included in
+    the distribution packages of TVB. The general implementation for weights and
+    tract lengths is a full $nodes\,\times\,nodes$ matrices without any symmetry restrictions.
+
+
+    \remove{Two types of brain connectivity 
+    are distinguished in TVB,
+    that is region-based and surface-based connectivity. In the former case,
+    the networks comprise discrete nodes and connectivity, in which each node
+    models the neural population activity of a brain region and the
+    connectivity is composed of interregional fibers.  The connectivity matrix
+    defines the connection strengths and time delays via signal transmission
+    between all network nodes. In the latter case, cortical and sub-cortical
+    areas are modeled on a finer and more realistic scale, in which each point
+    represents a neural population model. This approach allows a detailed
+    spatial sampling, in particular of the cortical surface, resulting in a
+    spatially continuous approximation of the neural activity as in neural
+    field modeling (Deco et al., 2008). Thus the connectivity is composed of
+    local intra-cortical and global inter-cortical fibers.}\add[PSL]{Two types
+    of structural connectivity are distinguished in TVB, that is long- and
+    short-range connectivity, given by the connectivity matrix and
+    the folded cortical surface respectively. The connectivity matrix defines
+    the connection strengths and time delays via finite signal transmission speed 
+    between two regions of the brain. The cortical surface allows a more detailed
+    spatial sampling resulting in a spatially continuous approximation of the
+    neural activity as in neural field modeling} \citep{Deco_2008a, Coombes_2010, Bressloff_2012}.
+    \add[PSL]{When using neural mass models, building the network upon the
+    surface allows for the application of arbitrary local connectivity kernels
+    which represent short-range intra-cortical connections. Additionally, networks
+    themselves can be defined at two distinct spatial scales yielding two
+    types of simulations (or brain network models): surface-based and 
+    region-based. In the former case, cortical and sub-cortical areas are shaped 
+    more realistically, each vertex of the surface is considered a node and is 
+    modeled by a neural population model; several nodes belong to a specific
+    brain region, and the edges of the network have a distance of the order of
+    a few millimeters. The influence of delayed activity coming from other
+    brain regions is added to the model via the long-range connectivity.
+    In the latter case of nodes only per region, the connectome itself is used as
+    a coarser representation of the brain network model. The networks comprise
+    discrete nodes, each of them models the neural population activity of a
+    brain region and the edges represent the long-range connectivity
+    (interregional fibers) on the order of a few centimeters. Consequently, in 
+    surface-based simulations both types of connectivity, short- and long-range, 
+    coexist whereas in region-based simulations one level of  geometry is lost: 
+    the short-range connectivity.}
+
+    Neural field models have been developed over many years for their ability to
+    capture the collective dynamics of relatively large areas of the brain in both
+    analytically and computationally tractable forms \citep{Beurle_1956,
+    Wilson_1972, Wilson_1973, Nunez_1974, Amari_1975, Amari_1977, Wright_1995,
+    Jirsa_1996, Jirsa_1997, Robinson_1997, Jirsa_2002, Attay_2006, Bojak_2010}.
+    Effectively neural field equations are tissue level models that describe the
+    spatiotemporal evolution of coarse grained variables such as synaptic or firing
+    rate activity in populations of neurons. Some of these models include explicit
+    spatial terms while others are formulated without an explicit spatial component
+    leaving open the possibility to apply effectively arbitrary local connectivity
+    kernels. The lumped representation of the dynamics of a set of similar neurons
+    via a common variable (e.g., mean firing rate and mean postsynaptic potential)
+    is known as neural mass modeling \citep{Freeman_1975book, Freeman_1992,
+    LopesdaSilva_1974}. Neural mass models accounting for parameter dispersion in
+    the neuronal parameters include \citep{Assisi_2005, Stefanescu_2008,
+    Stefanescu_2011, Jirsa_2010}.  Networks of neural masses, without an explicit
+    spatial component within the mass but with the possibility to apply local
+    connectivity kernels (e.g., Gaussian or Laplacian functions) between masses, can
+    be used to approximate neural field models. Both neural field and neural mass
+    modeling approaches embody the concept from statistical physics that macroscopic
+    physical systems obey laws that are independent of the details of the
+    microscopic constituents of which they are built \citep{book_Haken_1983}.  These
+    and related ideas have been exploited in neurosciences \citep{Kelso_1995,
+    Buzsaky_2006}.
+        
+    In TVB, our main interest lies in using the mesoscopic laws governing the
+    behavior of neural populations and uncovering the laws driving the processes
+    on the macroscopic brain network scale. The biophysical mechanisms
+    available to microscopic single neuron approaches are absorbed in the mean
+    field parameters on the mesoscopic scale and are not available for
+    exploration other than through variation of the mean field parameters
+    themselves. As a consequence, TVB represents a neuroinformatics tool that
+    is designed to aid in the exploration of large-scale network mechanisms of
+    brain functioning (see \citet{Ritter_2013} for an example of modeling with TVB). 
+
+    \add{Furthermore, TVB's approach to multi-modal neuroimaging integration in
+    conjunction with neural field modeling shares common features with the work of}
+    \citet{Bojak_2010a, Bojak_2011} and \citet{Babajani_2010}\add{.     The crucial difference
+    is that the structure upon which TVB has been      designed represents a
+    generalized large-scale ``computational neural      model'' of the whole brain.
+    The components of this large-scale model     have been separated as cleanly as
+    possible, and a specific structure     has been defined for the individual
+    components. This generic structure is intended to serve the purpose of
+    restricting the form of models      enough to make direct comparison straight
+    forward while still permitting a sufficiently large class of models to be
+    expressed. Likewise, the     paradigms presented during the last few years in
+    this line of research} \citep{Sotero_2007, Sotero_2008} \add{could potentially
+    be reproduced, tested and compared in TVB. The mathematics underlying our model-based 
+    approach have been partially described in various original articles}
+    \citep{Deco_2011,Deco_2012} \add{and will be reviewed in more detail in future articles.}
+        
+  \subsection{Informatics}
+    
+    From an informatics perspective, a large-scale simulation project requires
+    a well defined yet flexible workflow, i.e. adaptable according to the
+    users profiles. A typical workflow in TVB involves managing project
+    information, uploading data, setting up simulation parameters (model,
+    integration scheme, output modality), launching simulations (in parallel
+    if needed), analyzing and visualizing, and finally storing results and
+    sharing output data.
+    
+    \change[PSL]{The web interface allows users without programming
+    knowledge to access TVB to perform customized simulations using their
+    patients' data.}{The web interface allows users without programming
+    knowledge to access TVB to perform customized simulations (e.g. clinicians
+    could use their patient's data obtained from DTI studies).} In addition,
+    it enables them to gain a deeper understanding of the theoretical
+    approaches behind the scenes. On the other hand, theoreticians can design
+    their own models and get an idea of their biophysical realism, their
+    potential physiological applications and implications. As both kinds of
+    users may work within the same framework, the interplay of theory and
+    experiment or application is accelerated. Additionally, users with
+    stronger programming skills benefit from all the advantages provided by
+    the Python programming language: easy-to-learn, easy-to-use, scriptable
+    and with a large choice of scientific modules
+    \citep{Oliphant_2006}\add[PSL]{.}
+    
+    % WHY PYTHON?
+    TVB has been principally built in the Python programming language due to
+    its unique combination of flexibility, existing libraries and the ease,
+    with which code can be written, documented, and maintained by
+    non-programmers.  The simulation core, originally developed in MATLAB, was
+    ported to Python given its current significance in the numerical computing
+    and neuroscience community and its already proven efficiency for
+    implementing modeling tools \remove[PSL]{.}\citep{Spacek_2008}\add[PSL]{.}
+
+    \add{Simulations benefit from vectorized numerical computations
+    with NumPy arrays and are enhanced by the use of the \emph{numexpr} package.
+    Although this allows rather efficient single simulations, the desire to
+    systematically explore the parameter spaces of the neural dynamic models, and to
+    compare many connectivity matrices, has lead to the implementation of code
+    generation mechanisms for the majority of the simulator core -- producing C code
+    for both     native CPU and also graphics processing units (GPU), leading to a
+    significant speed up of parameter sweeps and parallel simulations (5x from
+    Python to C, 40x from C to GPU). Such graphics units have become popular in
+    scientific computing for their relatively low price and high computing power.
+    Going forward, the GPU implementation of TVB will require testing and
+    optimization before placing it in the hands of users. }
+
+    
+    This article intends to give a comprehensive but non-exhaustive
+    description of TVB, from both technical and scientific points of view. It
+    will describe the framework's architecture, the simulation core, and the
+    user interfaces.  It will also provide two examples, using specific
+    features of the simulator, extracted from the demo scripts which are
+    currently available in TVB's distribution packages. \remove{The mathematics
+    underlying the brain network models used in TVB is briefly described in
+    various original articles and will be 
+    reviewed in more detail elsewhere.}
+    
+    
+%##--------------------------------------------------------------------------##%
+%##                           SOFTWARE DESCRIPTION                           ##%
+%##--------------------------------------------------------------------------##%
+\begin{methods}
+
+\section{TVB Architecture}
+\note[PSL]{Smaller font is given by the Frontiers In LaTeX template}
+    The architectural model of the system has two main
+    components: the  scientific computing core and the supporting framework
+    with its graphical user interface. Both software components communicate
+    through an interface  represented by TVB-\tvbdatatype{Datatypes},
+    \change{as}{which are} described in subsection \ref{subsection:tvb-datatypes}. 
+    \add{In Fig. 1 TVB's architectural details are illustrated and explained in more
+    depth.}
+    
+    \paragraph*{General aspects} TVB is designed for three main deployment
+    configurations, according to the available hardware resources:  1) Stand
+    Alone;  2) Client-Server or 3) Cluster. In the first, a local  workstation
+    is assumed to have certain display, computing power and storage capacity
+    resources. In the second, an instance of TVB is running on a server
+    connected through a network link to client units, and thus accessible to a
+    certain number of users. In this deployment model, simulations use the
+    back-end server's computing power while visualization tasks use resources
+    from the client machine. The third is similar to the client-server
+    configuration, but with the additional advantage of parallelization
+    support in the back-end. The cluster itself needs to be configured
+    separately of TVB.
+    
+    Based on the usage scenarios and user's level of programming knowledge, two
+    user profiles are represented: a graphical user (G-user) and scripting user
+    (S-user).  We therefore provide the corresponding main interfaces based on
+    this  classification: a graphical user interface (web) and a scripting
+    interface (IDLE). S-users and G-users have different levels of control over
+    different parts of the system.  The profile of S-users is thought to be that
+    of scientific developers, that is, researchers who can elaborate complex
+    modeling scenarios, add their own models or directly modify the source code
+    to extend the scientific core of TVB, mostly working with the scientific
+    modules.  They do, nevertheless, have the possibility to enable the database
+    system. In contrast, G-users are relatively more constrained to the features
+    available in the stable releases of TVB, since their profile corresponds
+    more to that of researchers without a strong background in computational
+    modeling. The distinction between these two profiles is mainly a
+    categorization due to the design architecture of TVB. For instance, we could
+    also think of other type of users who want to work with TVB's GUI and are
+    comfortable with programming, and therefore they could potentially make
+    modifications in the code and then see the effect of those when launching
+    the application in a web browser.
+
+    The development of TVB is managed under Agile techniques. In
+    accord therewith, each task is considered as \emph{done}, after completing a validation
+    procedure that includes: adding a corresponding automated unit-test, labeling the
+    task as \emph{finished} from the team member assigned to implement
+    the task and further tagging as \emph{closed} from a team member
+    responsible for the module, which means a second level of testing. Before
+    releasing stable packages, there is a period for manual testing, that is, a
+    small group of selected users from different institutions check the main
+    features and functionalities through both interfaces. The navigation and workflows scenarios
+    through the web-based interface are evaluated by means of automated
+    integration tests for web-applications running with Selenium
+    (\url{http://docs.seleniumhq.org/}) and Apache-JMeter
+    (\url{http://jmeter.apache.org/}) on top of a browser engine. 
+    Special effort is being made to provide good code-coverage, including regression tests. Accordingly, the
+    simulation engine of TVB has automated unit-tests, to guarantee the proper and
+    coordinated functioning of all the modules, and simple programs
+    (demonstration scripts), that permit to qualitatively evaluate 
+    the scientific correctness of the results.
+    
+    The development version of TVB is currently
+    hosted on a private cluster,  where we use the version control system
+    \emph{svn} (subversion).  \add{Additionally, as any large collaborative
+    open-source project, it is also available in a public repository, using
+    the distributed version control system \emph{git}} \citep{Chacon_2009}
+    \add{to make accessible the scientific core and to gather, manage and
+    integrate contributions from the community.}  The
+    distribution packages for TVB come with an extensive documentation,
+    including: a \emph{User Guide}, explaining how to install TVB, set up
+    models and run them; \emph{Tutorials}, \emph{Use Cases} and \emph{Script
+    Demos}, guiding users to achieve predefined simulation scenarios; and a
+    \emph{Developer Guide} and \emph{API reference}. \remove{There is an
+    active users group of TVB hosted in Google Groups where users can ask
+    questions, report issues and suggest improvements or new features.}  Table
+    1 \add{provides the links to: the official TVB website,
+    where distribution packages for Linux and Mac OS (32 and 64 bits) and
+    Windows (32 bits) are available for download; the active users group of
+    TVB hosted in Google Groups, where users can ask questions, report issues
+    and suggest improvements or new features; and the public repository, where
+    the source code of both the framework and scientific library (which
+    contains the simulation engine) are available.}
+
+  \note{New table providing links}
+%--------------------------------TABLE--------------------------------------%%
+  
+  \begin{center}
+    \begin{table}\label{tab:tvb_links}\tiny
+      \caption{TVB links}
+      \begin{tabularx}{0.5\textwidth}{l  l}
+        \toprule
+        TVB official website        &{\tiny{ 
+        \url{http://www.thevirtualbrain.org}}}                        \\
+        Distribution packages        & 
+        {\tiny{\url{http://www.thevirtualbrain.org/register}}}        \\
+        Public repository           & 
+        {\tiny{\url{https://github.com/the-virtual-brain}}}           \\
+        User group                  & 
+        {\tiny{\url{https://groups.google.com/group/tvb-users/}}}     \\
+        \bottomrule        
+      \end{tabularx}
+    \end{table}
+  \end{center}  
+%
+%--------------------------------FIGURE--------------------------------------%%
+%% Fig. 1       
+%
+%##--------------------------------------------------------------------------##%
+%##                           INSTALL                                        ##%
+%##--------------------------------------------------------------------------##%
+%
+    \paragraph*{Installation and System Requirements}
+    
+    When using the web \change{application}{interface}, users are
+    \change{required}{recommended} to have a high  definition monitor (at
+    least 1600 x 1000 pixels), a WebGL and WebSockets  compatible browser
+    (latest versions of Mozilla Firefox, Apple Safari or  Google Chrome), and
+    a WebGL-compatible graphics card, that supports OpenGL version 2.0 or
+    higher \citep{opengl-redbook}.
+    
+    Regarding memory and storage capacity, for a stand alone installation a
+    minimum of 8GB of RAM \add[PSL]{is recommended. For multi-users environments}   
+    \change[PSL]{50GB}{5GB} of space per user is
+    \change[PSL]{recommended}{suggested}. \add[PSL]{This is a storage quota 
+    specified by an administrator to manage 
+    the maximum hard disk space per user.} As for computing power one CPU core is needed
+    for a simulation with a small number of nodes, while simulations with a
+    large number of nodes, such as surface simulations, can make use of a few
+    cores if they are available.  When the number of launched simulations is
+    larger than the number of  available cores, a serialization is recommended
+    (a serialization mechanism  is provided by the supporting framework
+    through the web user interface by specifying the maximum of simultaneous
+    jobs allowed).  In order to use the Brain Connectivity Toolbox
+    \citep{Rubinov_2010},  MATLAB or Octave should be installed, activated and
+    accessible for the  current user. \remove[PSL]{The Brain Connectivity
+    Toolbox does not need to be  installed or enabled separately in any way,
+    as TVB will temporarily append  its own copy of the toolbox to the
+    MATLAB/Octave path.}
+
+%##--------------------------------------------------------------------------##%
+%##                           WEB - FRAMEWORK                                ##%
+%##--------------------------------------------------------------------------##% 
+
+  \subsection{TVB Framework}\label{subsec:TVBFramework}
+    
+    The supporting framework provides a database back-end, workflow management
+    and a number of features to support collaborative work. \add{The latter
+    feature permits TVB to be setup as a multi-user application. In this
+    configuration, a login system enables users to access their personal
+    sessions; by default their projects and data are private, but they can be
+    shared with other users.} The graphical user interface (GUI) is web based,
+    making use of HTML 5, WebGL, CSS3 and Java  Script \citep{Bostock_2011}
+    tools to provide an intuitive and responsive  interface that can be
+    locally and remotely accessed.
+    
+    \subsubsection{Web-based GUI}
+    TVB provides a web-based interactive framework to generate, manipulate and
+    visualize connectivity and network dynamics. Additionally, TVB comprises a
+    set of classic time-series analysis tools, structural and functional
+    connectivity analysis tools, as well as parameter exploration facilities
+    which can launch \change{parallel simulations}{simulations in parallel} on
+    a cluster or on multiple compute  cores of a server. The GUI of TVB has 6
+    main working areas: \textbf{USER},  \textbf{PROJECT}, \textbf{SIMULATOR},
+    \textbf{ANALYZE}, \textbf{STIMULUS}  and \textbf{CONNECTIVITY}. In
+    \textbf{USER}, the users manage their  accounts and TVB settings. In
+    \textbf{PROJECT}, individual projects are  managed and navigation tools
+    are provided to explore their structure as  well as the data associated
+    with them. \add{A sub-menu within this area provides a dashboard with a
+    list of all the operations along with their current status (running, error,
+    finished), owner, wall-time and associated data, among other information}.
+    In \textbf{SIMULATOR} the  large-scale network model is set up and
+    simulations launched, additional  viewers for structural and functional
+    data are offered in 2D and 3D, as  well as other displays to visualize the
+    results of a simulation. A history  of simulations is also available in
+    this area. In \textbf{ANALYZE} time-series and
+    network analysis methods are provided. In \textbf{STIMULUS}, users can
+    interactively create stimulation patterns.  Finally, in
+    \textbf{CONNECTIVITY}, users are given a responsive interface  to edit the
+    connectivity matrices assisted by interactive visualization  tools. Fig.
+    \ref{Fig02:tvb_wui} \change{summarizes the general usage of}{depicts the
+    different working areas, as well as a number of their sub-menus, available
+    through} the web UI. \add{A selection of screenshots illustrating the
+    interface in a web browser is given in Fig.} \ref{Fig03:ui_screenshots}.
+
+%%%--------------------------------FIGURE--------------------------------------%%
+%% Fig. 2
+  
+%%--------------------------------FIGURE--------------------------------------%%
+% Fig. 3
+
+%##--------------------------------------------------------------------------##%
+%##                           DATA                                           ##%
+%##--------------------------------------------------------------------------##% 
+    
+    \subsubsection{Data Management and Exchange}
+    
+    One of the goals of TVB is to allow researchers from different backgrounds 
+    and with different programming skills to have quick access to their 
+    simulated data. Data from TVB can be exchanged with other instances of TVB
+    (copies installed on different computers) or with other applications in the 
+    neuroscientific community, e.g. MATLAB, Octave, The Connectome ToolKit 
+    \citep{Gerhard_2011}. 
+    
+    \paragraph*{Export} A project created within TVB can be entirely exported 
+    to a .zip file. Besides storing all the data generated within a particular
+    project in binary files, additional XML files are created to provide a 
+    structured storage of metadata, especially with regard to the steps taken 
+    to set up a simulation, configuration parameters for specific operations,
+    time-stamps and user account information. This mechanism procures a summary
+    of the procedures carried on by researchers within a project which is used
+    for sharing data across instances of TVB. The second export mechanism 
+    allows the export of individual data objects. The data format used in TVB 
+    is based on the HDF5 format \remove{(The HDF Group. Hierarchical data format 
+    version 5)} \citep{HDF5} because it presents a number of advantages over 
+    other formats: 
+        1) huge pieces of data can be stored in a condensed form; 
+        2) it allows grouping of data in a tree structure;
+        3) it allows metadata assignment at every level; and 
+        4) it is a widely used format, accessible in several programming 
+        languages and applications.
+    Additionally, each object in TVB has a global unique identifier (GUID) 
+    which makes it easy to identify an object across systems, avoiding naming 
+    conflicts among files containing objects of the same type.
+    
+    \paragraph*{Import}
+    
+    A set of mechanisms ("uploaders") is provided in TVB to import data into the
+    framework, including neuroimaging data generated independently by other
+    applications. The following formats are supported: NIFTI-1 (volumetric time-
+    series), GIFTI (surfaces) and CFF (connectome file). General compression formats,
+    such as ZIP and BZIP2 are also supported for certain data import routines that
+    expect a set of ASCII text files compressed in an archive. Hence the use of
+    general compression formats means that preparing datasets for TVB is as simple
+    as generating an archive with the correct ASCII files, in contrast to some of
+    the other neuroscientific data formats found elsewhere. For instance, a
+    \tvbdatatype{Connectivity} dataset (\emph{connectome}) may be uploaded as a zip
+    folder containing the following collection of files: (i) areas.txt, (ii)
+    average\_orientations.txt, (iii) info.txt, (iv) positions.txt, (v)
+    tract\_lengths.txt and (vi) weigths.txt. More conventions     and guidelines to
+    use each uploader routine can be found in the \emph{User Guide} of TVB's
+    documentation.
+
+    \subsubsection{File Storage}
+    The storage system is a tree of folders and files. The actual location on
+    disk is configurable by the user, but the default is a folder called
+    ``TVB'' in the user's home folder. There is a sub-folder for each
+    \textbf{Project}  in which an XML file containing details about the
+    project itself is stored.  Then for each operation, one folder per
+    operation is created containing a  set of .h5 files generated during that
+    particular operation, and one XML  file describing the operation itself.
+    The XML contains tags like   \emph{creation date}, \emph{operation status}
+    (e.g. Finished, Error),  \emph{algorithm reference}, \emph{operation
+    GUID}, and most importantly \emph{input parameters dictionary}.
+    Sufficiently detailed information is stored in the file system to be able
+    to export data from one instance of TVB and to then import it into another
+    instance,  correctly recreating projects, including all operations and
+    their results. 
+    Even though the amount of data generated per operation varies greatly,
+    since it depends strongly on the Monitors used and parameters of the 
+    simulation, some rough estimates are given below:
+
+    - A 1000 ms long, region-based simulation with all the default parameters
+    requires approximatively 1 MB of disk space.
+
+    - A 10 ms long, surface-based simulation, using a precalculated sparse
+    matrix to describe the local connectivity kernel and all the default
+    parameters, requires about 280 MB.
+
+    Users can manually remove unused data using the corresponding controls in
+    TVB's GUI. In this case, all files related to these data are also deleted,
+    freeing disk space. The amount of physical storage space available to TVB
+    can be configured in the \textbf{USER -> Settings} working area of the GUI
+    -- this is, of course, limited by the amount of free space available on the
+    users hard drives.
+
+    \subsubsection{Database Management System}
+      % Why SQLite and PostgreSQL?
+    Internally, TVB framework uses a relational database (DB), for ordering and 
+    linking entities and as an indexing facility to quickly look up data. 
+    At install time, users can choose between SQLite 
+    (a file based database and one of the most used embedded DB systems) and 
+    PostgreSQL (a powerful, widely spread, open-source object-relational DB 
+    system which requires a separate installation by users) as the DB engine. 
+    In the database, only references to the entities are stored, with the actual 
+    operation results always being stored in files, due to size. A relational 
+    database was chosen as it provides speed when filtering entities and 
+    navigating entity relationship trees.
+    
+    \subsection{TVB Datatypes}\label{subsection:tvb-datatypes}    
+    In the architecture of TVB, a middleware layer represented by
+    TVB-\tvbdatatype{Datatypes} allows the handling and flow of data between
+    the scientific kernel and the supporting framework.
+    TVB-\tvbdatatype{Datatypes}  are annotated data structures which contain
+    one or more data attributes and  associated descriptive information, as
+    well as methods for operating on the  data they contain. The definition of
+    a \tvbdatatype{Datatype} is achieved using  TVB's traiting system, which
+    was inspired by the traiting system developed by  Enthought
+    \citep{EnthoughtTraits}. The traiting system of TVB, among other things,
+    provides a mechanism for annotating data, that is, associating additional
+    information with the data which is itself usually a single number or an
+    array of  numbers. A complete description of TVB's traiting system is
+    beyond the  scope of this article. However, in describing TVB's
+    \tvbdatatype{Datatypes} we will give an example of its use, which should
+    help to provide a basic understanding of the mechanism.
+      
+    A number of basic TVB-\tvbdatatype{Datatypes} are defined based on
+    \tvbtrait{Types} that are part of the traiting system, with these traited
+    \tvbtrait{Types}, in turn, wrapping Numpy data types. For instance,
+    TVB-\tvbdatatype{FloatArray} is a datatype derived from the traiting
+    system's  \tvbtrait{Array} type, which in turn wraps Numpy's
+    \textbf{ndarray}.  The traiting system's \tvbtrait{Array} type has
+    attributes or annotations,  such as: \tvbattribute{dtype}, the numerical
+    type of the data contained in the array; \tvbattribute{label}, a short
+    (typically one or two word)  description of what the \tvbtrait{Array}
+    refers to, this information is  used by the supporting framework to create
+    a proper label for the GUI;  \tvbattribute{doc}, a longer description of
+    what the \tvbtrait{Array}  refers to, allowing the direct integration of
+    useful documentation into array objects; and \tvbattribute{default}, the
+    default value for an  instance of an \tvbtrait{Array} type. In the case of
+    a  \tvbdatatype{FloatArray}, the \tvbattribute{dtype} attribute is fixed
+    as  being numpy.float64.
+    
+    More complex, higher-level, TVB-\tvbdatatype{Datatypes} are then built up
+    with  attributes that are themselves basic TVB-\tvbdatatype{Datatypes}.
+    For example, TVB-\tvbdatatype{Connectivity} is datatype which includes
+    multiple  \tvbdatatype{FloatArray}s, as well as a number of other traited
+    types,  such as \tvbtrait{Integer} and \tvbtrait{Boolean}, in its
+    definition.  An example of a \tvbdatatype{FloatArray} being used to define
+    an attribute  of a \tvbdatatype{Connectivity} can be seen in Code
+    \ref{code:floatarray}.  The high-level \tvbdatatype{Datatypes} currently
+    defined in TVB are summarized in Table 2. %\ref{tab:tvb_datatypes}.
+    
+
+%%--------------------------------CODE--------------------------------------%%
+\pagebreak
+\begin{lstlisting}[backgroundcolor=\color{black!5}, 
+                   caption= An instance of TVB's \tvbdatatype{FloatArray} 
+                    \tvbdatatype{Datatype} being used to define the conduction
+                    \tvbattribute{speed} between brain regions as an attribute
+                    of a \tvbdatatype{Connectivity} \tvbdatatype{Datatype} \\,
+                   commentstyle=\itshape\color{green!50!black},
+                   frame=single,
+                   stringstyle=\color{magenta},
+                   keywordstyle={\bf\ttfamily\color{blue}},
+                   label=code:floatarray,
+                   literate=%
+                    {0}{{{\color{orange}0}}}1
+                    {3.}{{{\color{orange}3.}}}1,
+                   morekeywords={*,FloatArray},
+                   showspaces=false,
+                   showtabs=false]
+                   
+speed = FloatArray(
+    label = "Conduction speed", 
+    default = numpy.array([3.0]),
+    doc = """A single number or matrix of conduction speeds for the 
+             myelinated fibre tracts between regions.""")
+
+\end{lstlisting} 
+    
+    
+    \change{As an example of the flow of data through TVB using
+    \tvbdatatype{Datatypes}. } {An example indicating the usage and features
+    of TVB-\tvbdatatype{Datatypes} is provided below. } When a user uploads a
+    connectivity dataset through the UI, an instance of  a
+    \tvbdatatype{Connectivity} datatype is generated. This
+    \tvbdatatype{Connectivity} datatype is one of the required input arguments
+    when creating an instance of \change{the simulation
+    engine}{\tvbmodule{Simulator}}. As a  result of the execution of a
+    simulation, other TVB-\tvbdatatype{Datatypes} are generated, for instance
+    one or more \tvbdatatype{TimeSeries} datatypes. Specifically, if the
+    simulation is run using  the MEG and EEG recording modalities then
+    \tvbclass{TimeSeriesMEG},  \tvbclass{TimeSeriesEEG}, which are subclasses
+    of  \tvbdatatype{TimeSeries}, are returned. Both the
+    \tvbdatatype{Connectivity} and \tvbdatatype{TimeSeries} datatypes are
+    accepted by a range of appropriate analysis and visualization methods.
+    
+    Further, TVB-\tvbdatatype{Datatypes} have attributes and metadata which
+    remains accessible after exporting in TVB format. The metadata includes a 
+    technical description of the data (storage size for instance) as well as
+    scientifically relevant properties and useful documentation to properly 
+    interpret the dataset. In the shell interface, the attributes of 
+    TVB-\tvbdatatype{Datatype} can be accessed by their key-names in the same
+    way as Python dictionaries. 
+
+%%--------------------------------FIGURE--------------------------------------%%
+%% Fig. 4
+    
+
+\begin{center}     \begin{table*}[ht]\tiny     \label{tab:tvb_datatypes}
+\caption{TVB Datatypes. Specifications about the requirements to build a
+TVB-Datatype can be found in the documentation of the distribution packages.}
+\begin{tabularx}{\textwidth}{lll}             \toprule             Base Class
+Datatype & Description                   & Derived Classes \\
+\midrule             Connectivity        & Maps connectivity matrix data     &
+Connectivity\\             \\             Surfaces            & Covers surface
+representations    &   CorticalSurface,
+SkinAir,
+BrainSkull,
+SkullSkin,
+EEGCap,
+FaceSurface,
+Cortex,
+RegionMapping, \\
+&&  LocalConnectivity\\             \\
+Volumes             & Wraps volumetric data            & ParcellationMask,
+StructuralMRI \\             \\
+Sensors              & Wraps sensors data used in different acquisition
+techniques to generate physiological recordings
+& SensorsEEG, SensorsMEG, SensorsInternal\\             \\
+ProjectionMatrix    & Wraps matrices defining a linear operator to map the
+spatial sources into the leadfield domain.
+&  ProjectionRegionEEG, ProjectionSurfaceEEG, ProjectionRegionMEG   \\
+            
+                              & It relates two datatypes: a source of type
+Connectivity or Surface and a set of Sensors.
+& ProjectionSurfaceMEG \\                               & The matrix is
+computed using OpenMEEG. \citep{Gramfort_2010} & \\             \\
+Equations           & Commonly used functions for defining local connectivity
+kernels and stimulation patterns. &    \\             \\
+SpatialPattern      & Contains patterns mainly used as stimuli. It makes use
+of Equation datatypes
+& SpatioTemporalPattern,
+StimuliRegion,
+StimuliSurface,
+SpatialPatternVolume \\             \\
+TimeSeries          & One of the most important TVB-Datatypes. Derived classes
+wrap measurements recorded  & TimeSeriesRegion,
+TimeSeriesSurface,
+TimeSeriesVolume,
+TimeSeriesEEG, \\                              & under different acquisition
+modalities.                           &   TimeSeriesMEG \\             \\
+Graph               & Wraps results from a covariance analysis or results from
+BCT analyzers    &   Covariance,
+ConnectivityMeasure\\             \\
+MappedValues      & Wraps a single value computed from a TimeSeries object &
+\\             ModeDecomposition & Wraps results from matrix factorization
+analysis (i.e. PCA and ICA) &   PrincipalComponents,
+IndependentComponents\\             \\
+Spectral            & Wraps results from frequency analysis         &
+FourierSpectrum, WaveletCoefficients, ComplexCoherenceSpectrum \\
+\bottomrule         \end{tabularx}     \end{table*} \end{center}
+
+
+%##--------------------------------------------------------------------------##%
+%##                           SIMULATOR                                      ##%
+%##--------------------------------------------------------------------------##% 
+
+    \subsection{TVB Simulator}
+    
+    The simulation core of TVB brings together a mesoscopic model of neural
+    dynamics with structural data. \add{The latter defines both the spatial
+    support} (see Fig. \ref{Fig04:connectivity})\add{, upon which the brain
+    network model is built, and the hierarchy of anatomical connectivity, that
+    determines the spatial scale represented by the structural linkages
+    between nodes} \citep{Freeman_1975book}. \change{It}{Simulations} then
+    recreate the emergent brain  dynamics by numerically integrating this
+    coupled system of differential equations. All these entities have their
+    equivalent representation as  \tvbclass{classes} either in the scientific
+    \tvbmodule{modules} or  \tvbdatatype{datatypes}, and are bound together in
+    an instance of the  \tvbclass{Simulator} class. \add{In the following
+    paragraphs we describe all the individual components required to build a
+    minimal representation of a brain network model and run a simulation, as 
+    well as the outline of the operations required to
+    initialize a \tvbclass{Simulator} object and the operations of the update
+    scheme.} \remove{This class is defined in the  \tvbmodule{simulator}
+    module and has several \tvbmethod{methods} to set up the spatiotemporal
+    dimensions of the input and output arrays, based on configurable
+    attributes of the individual components such as integration time step
+    (e.g.
+    \tvbmodule{integrators}.\tvbclass{HeunDeterministic}.\tvbattribute{dt}),
+    structural spatial support (e.g.
+    \tvbdatatype{connectivity}.\tvbclass{Connectivity} or
+    \tvbdatatype{surfaces}.\tvbclass{CorticalSurface}) and transmission speed
+    (e.g.
+    \tvbdatatype{connectivity}.\tvbclass{Connectivity}.\tvbattribute{speed})
+    as well as a cascade of specific \tvbmethod{configuration methods} to
+    initialize all the individual components required to build a minimal
+    representation of a brain network model and perform a
+    simulation.}
+
+%%--------------------------------FIGURE--------------------------------------%%
+% Fig. 5    
+    
+    \subsubsection{Coupling}
+    The brain activity (state variables) that has been propagated over the 
+    long-range \tvbdatatype{Connectivity} pass through these functions before
+    entering the equations of a \tvbclass{Model} describing the local dynamics.
+    A \tvbclass{Coupling} function's primary purpose is to rescale the
+    incoming activity to a level appropriate to the population model. The base
+    \tvbclass{Coupling} class as well as a number of different coupling
+    functions are implemented in the \tvbmodule{coupling} module, for instance
+    \tvbclass{Linear} and \tvbclass{Sigmoidal}. 
+    
+    \subsubsection{Population Models}
+    % The thing class thing model metaphor
+    A set of default mesoscopic neural models are defined in TVB's 
+    \tvbmodule{models}. All these models of local dynamics are classes derived
+    from a base \tvbclass{Model} class. 
+    
+    We briefly discuss the implemented population models in order of
+    increasing complexity. They include a generic two dimensional oscillator,
+    a collection of classical  population models and two recently developed
+    multi-modal neural mass models. Below, $N$ refers to the number of state
+    variables or equations governing the  evolution of the model's temporal
+    dynamics; $M$ is the number of modes and by default $M=1$ except for the
+    multi-modal models.
+    
+    The \tvbclass{Generic2dOscillator} model ($N=2$) is a generic phase-plane
+    oscillator model capable of generating a wide range of phenomena observed
+    in neuronal population dynamics, such as multistability, the coexistence
+    of oscillatory and non-oscillatory dynamics, as well as displaying
+    dynamics at multiple  time scales.
+    
+    The \tvbclass{WilsonCowan} model \citep{Wilson_1972} ($N=2$) describes the 
+    firing rate of a neural population consisting of two subpopulations (one 
+    excitatory and the other inhibitory). It was originally derived using 
+    phenomenological arguments. This neural mass model provides an intermediate 
+    between a microscopic and macroscopic level of description of neural 
+    assemblies and populations of neurons since it can be derived from 
+    pulse-coupled neurons \citep{Haken_2001} and its continuum limit 
+    resembles neural field equations \citep{Jirsa_1996}.  
+    
+    The \tvbclass{WongWang} model \citep{Wong_2006} represents a reduced
+    system of $N=2$ coupled  nonlinear equations, originally derived for
+    decision making in two-choice tasks.  The \tvbclass{BrunelWang} model
+    \citep{Brunel_2001, Brunel_2003} is a mean  field model derived from
+    integrate-and-fire  spiking neurons and makes the approximation of
+    randomly distributed interspike  intervals. It is notable that this
+    population model shows only attractor states of  firing rates. It has been
+    extensively used to  study working memory. Its complexity resides in the
+    number of parameters  that it uses to characterize each population
+    ($N=2$). These parameters  correspond to physical quantities that can be
+    measured in neurophysiology  experiments. The current implementation of
+    this model is based on the approach  used in \citep{Deco_2012}.
+    
+    
+    The \tvbclass{JansenRit} model \citep{Jansen_1995} is a derivative of the
+    Wilson-Cowan model and features three coupled subpopulations of cortical
+    neurons: an excitatory population of pyramidal cells interacting with two
+    populations of interneurons, one inhibitory and the excitatory.  This
+    model can produce alpha activity consistent with that measured in EEG, and is
+    capable of simulating evoked potentials \citep{Jansen_1993}. It displays a
+    surprisingly rich and complex oscillatory dynamics under periodic
+    stimulation  \citep{Spiegler_2010}. Each population is described by a
+    second order differential equation. As a consequence the system is
+    described by a set of $N=6$ first order differential equations.
+    
+    
+    The \tvbclass{StefanescuJirsa2D} and \tvbclass{StefanescuJirsa3D} models
+    \citep{Stefanescu_2008, Jirsa_2010, Stefanescu_2011} are neural mass
+    models derived from a globally coupled population of neurons of a
+    particular kind. The  first one has been derived from coupled 
+    FitzHugh-Nagumo neurons  \citep{FitzHugh_1961, Nagumo_1962}, which, with $N=2$, are
+    capable of  displaying excitable dynamics, as well as oscillations. The
+    second is  derived from coupled Hindmarsh-Rose neurons
+    \citep{Hindmarsh_1984}, which are also capable of producing excitable and
+    oscillatory dynamics, but  with $N=3$ have the additional capability of
+    displaying transient  oscillations and bursts. The two Stefanescu-Jirsa
+    models show the most complex  repertoire of dynamics (including bursting
+    and multi-frequency oscillations).  They have been derived using mean
+    field techniques for parameter dispersion  \citep{Assisi_2005} and have an
+    additional dimension, the mode $M$, which partitions  the dynamics into
+    various subtypes of population behavior. These models are therefore
+    composed of 12 ($N=4$, $M=3$) and 18 ($N=6$, $M=3$) state variables,
+    respectively.
+    
+    \subsubsection{Integrators}
+    The base class for integration schemes is called \tvbclass{Integrator}, an
+    \tvbmodule{integrators} module contains this base class along with a set
+    of  specific integration scheme classes for solving both deterministic and
+    stochastic differential equations. The specific schemes implemented for
+    brain network simulations include the \tvbclass{Euler} and \tvbclass{Heun}
+    methods.\remove{The 4th-order \tvbclass{Runge-Kutta} method is available,
+    however, this is only suitable for the integration of single (isolated)
+    instances of the dynamic \tvbclass{Models}.}\add{ The 4th-order 
+    \tvbclass{Runge-Kutta} (rk4) method is only available for solving ordinary differential
+    equations (ODEs), i.e., deterministic integration, given that there are
+    various variants for the stochastic version of the method, differing rates of
+    convergence being one of the points that several attempts of creating a
+    stochastic adaptation fail at (see} \citet{Burrage_2004} for an overview). 
+    Therefore, this method is available for drawing example trajectories in the interactive
+    phase-plane plot tool. \remove{(Fig. 8).} 
+    
+    
+    \subsubsection{Noise}
+    
+    Noise plays a crucial role for brain dynamics, and hence for brain
+    function \citep{McIntosh_2010}. The \tvbmodule{Noise} module consists of
+    two base classes: \tvbclass{RandomStream} that wraps Numpy's RandomState
+    class and \tvbclass{Noise}. The former provides the ability to create
+    multiple random streams which can be independently seeded or set to
+    an explicit initial state.  The latter is the base class from which
+    specific noises, such as white and colored \citep{Fox_1988},  are
+    derived. In TVB's implementation \tvbclass{Noise} enters as an additional
+    term within the stochastic integration schemes, and can be either an
+    \tvbclass{Additive} or \tvbclass{Multiplicative} process
+    \citep{Kloeden_1995}.  As well as providing a means to generate
+    reproducible stochastic processes for the  integration schemes, the
+    related classes in \tvbmodule{noise} are  used to set the initial
+    conditions of the system when no explicit initial  conditions \add{are
+    specified}.
+    
+    \subsubsection{Monitors}
+    The data from a simulation is processed and recorded while the simulation
+    is running, that is, while the differential equations governing the system
+    are being integrated. The base class for these processing and recording
+    methods is the \tvbclass{Monitor} class in the \tvbmodule{Monitors}
+    module.  We consider two main types of  online-processing: 1) raw or 
+    low-level; and 2) biophysical or high-level. The output of a
+    \tvbclass{Monitor} is a 4-dimensional  array (which can be wrapped in the
+    corresponding \tvbdatatype{TimeSeries}  datatype), i.e., a 3D state vector
+    as a function of time. For the first  kind of \tvbclass{Monitors} these
+    dimensions correspond to  $[time, state\,variables, space, modes]$ where
+    ``space'' can be either  brain regions or vertices of a cortical surface
+    plus non-cortical brain  regions. The number of state variables as well as
+    the number of modes strictly depend on the \tvbclass{Model}. For the
+    second kind of  \tvbclass{Monitors}, the dimensions are $[time, 1,
+    sensors, 1]$. The  simplest form of low-level \tvbclass{Monitor} returns
+    all the simulated  data, i.e., time points are returned at the sampling
+    rate corresponding to the integration scheme's step size and all 
+    state variables are returned for all nodes. All other low-level
+    \tvbclass{Monitors} perform some degree of down-sampling, such as
+    returning only a reduced set state variables (by  default the
+    \emph{variables of interest} of a \tvbclass{Model}), or  down-sampling in
+    ``space'' or time. Some variations include temporally sub-sampled,
+    spatially averaged and temporally sub-sampled, or temporally averaged. The
+    biophysical \tvbclass{Monitors} instantiate a physically realistic
+    measurement process on the simulation, such as \tvbclass{EEG},
+    \tvbclass{MEG}, \add{\tvbclass{SEEG}} or \tvbclass{BOLD}. For the first
+    two, a \tvbdatatype{ProjectionMatrix} is also required. This matrix  maps
+    source activity (``space")  to sensor activity (``sensors").
+    \remove{Currently,} OpenMEEG \citep{Gramfort_2010} \change{is}{was} used
+    to generate the demonstration projection matrix, also known as 
+    lead-field or gain matrix, that correspond to the EEG/MEEG forward solution.
+    \add{The forward solution modeling the signals from depth electrodes is
+    based on the point dipole model in homogeneous space} \citep{Sarvas_1987}.
+    The \tvbclass{BOLD} monitor is based on \citet{Buxton_1997} and \citet{Friston_2000}.
+    Fig. \ref{Fig05:tvb_sim} summarizes the fundamental blocks  required to
+    configure a full model, launch a simulation and retrieve the simulated
+    data. 
+
+    In most neural mass models there is a state variable representing some type
+    of neural activity (firing rate, average membrane potential, etc.), which
+    serves as a basis for the biophysical monitors. The state variables used as
+    source of neural activity depend both on the \tvbclass{Model} and the
+    biophysical space that it will be projected onto (MEG, EEG, BOLD). Given a
+    neural mass model with a set of state variables, G-Users can choose which
+    subset of state variables will be fed into a \tvbclass{Monitor}
+    (independently for each monitor). However, how a given \tvbclass{Monitor}
+    operates on this subset of state variables is an intrinsic property of the
+    monitor. Users with programming experience can, of course, define new
+    monitors according to their needs. Currently, there is not a mechanism
+    providing automatic support for general operations over state variables
+    before they are passed to a monitor. As such, when the neural activity
+    entering into the monitors is anything other than a summation or average
+    over state variables then it is advised to redefine the \tvbclass{Model} in
+    a way that one of the state variables actually describes the neural activity
+    of interest.
+
+	\note[PSL]{New subsection : workflow of the simulator algorithm}
+    \subsubsection{Outline of the simulation algorithm}
+    
+    The \tvbclass{Simulator} class has several
+    \tvbmethod{methods} to set up the spatiotemporal dimensions of the input
+    and output arrays, based on configurable attributes of the individual
+    components such as integration time step (e.g.
+    \tvbmodule{integrators}.\tvbclass{HeunDeterministic}.\tvbattribute{dt}),
+    structural spatial support (e.g.
+    \tvbdatatype{connectivity}.\tvbclass{Connectivity} or
+    \tvbdatatype{surfaces}.\tvbclass{CorticalSurface}) and transmission speed
+    (e.g.
+    \tvbdatatype{connectivity}.\tvbclass{Connectivity}.\tvbattribute{speed})
+    as well as a cascade of specific \tvbmethod{configuration methods} to
+    interface them. The \tvbclass{Simulator} class coordinates the
+    collection of objects from all the modules in the scientific library
+    needed to build the network model and yield the simulated data.  To perform a
+    simulation a \tvbclass{Simulator} object needs to be: 1)  configured,
+    initializing all the individual components and calculating attributes
+    based on the combination of objects passed to the \tvbclass{Simulator} 
+    instance; and 2) called in a loop to obtain simulated data, i.e., to run 
+    the simulation (see Code \ref{code:region_deterministic}). The next 
+    paragraphs list the main operations of the simulation algorithm. 
+
+    \paragraph*{Initializing a}\tvbclass{Simulator}
+      \begin{enumerate}
+
+        \item Check if the transmission \tvbattribute{speed} was provided. 
+
+        \item Configure the \tvbdatatype{Connectivity} matrix (connectome). The
+        \tvbattribute{delays} matrix is computed using the distance matrix and
+        the transmission \tvbattribute{speed}. Get the \tvbattribute{number of
+        regions}.
+
+        \item Check if a \tvbdatatype{Surface} is provided.
+
+        \item Check if a stimulus \tvbdatatype{pattern} is provided.
+
+        \item Configure individual components: \tvbclass{Model},
+            \tvbclass{Integrator}, \tvbclass{Monitors}. From here we obtain
+            \tvbattribute{integration time step size}, 
+            \tvbattribute{number of statevariables}, \tvbattribute{number of modes}.
+
+        \item Set the \tvbattribute{number of nodes} 
+            (region-based or surface-based 
+            simulation). If a \tvbdatatype{Surface} was given the 
+            \tvbattribute{number of nodes} will correspond to the number of 
+            vertices plus the number of non-cortical regions, otherwise it will 
+            be equal to the \tvbattribute{number of regions} in the 
+            \tvbdatatype{Connectivity} matrix.
+
+        \item Spatialise model parameters if required. Internally, TVB uses 
+            arrays for model parameters, if the size of the array for a 
+            particular parameter is 1, then the same numerical value is applied
+            to all nodes. If the size of the parameter array is $N$, where $N$ is 
+            the number of nodes, the parameter value for each node is taken 
+            from the corresponding element of the array of parameter values.
+
+        \item If applicable, configure spatial component of stimulation 
+            \tvbdatatype{Patterns} (requires \tvbattribute{number of nodes}).
+
+        \item Compute \tvbattribute{delays} matrix in integration time steps.
+
+        \item Compute the \tvbattribute{horizon} of the delayed state, that is 
+            the maximum delay in integration time steps.
+
+        \item Set the \tvbattribute{history} shape. The history state contains 
+            the activity that propagates from the delayed state to the next. 
+
+        \item Determine if the \tvbclass{Integrator} is deterministic or 
+            stochastic. If the latter, then configure the \tvbclass{Noise} and 
+            the integration method accordingly. 
+
+        \item Set \tvbattribute{initial conditions}. This is the \tvbattribute{
+              state} from which the simulation will begin. If none is provided,
+              then random initial conditions are set based on the ranges of the
+              model's state variables. Random initial conditions are fed to the
+              initial \tvbattribute{history} array providing the minimal state of
+              the network with time-delays before $t=0$. If initial conditions are
+              user-defined but the length along the time dimension is shorter than
+              the required \tvbattribute{horizon}, then  the
+              \tvbattribute{history} array will be padded using the same method of
+              described for random \tvbattribute{initial conditions}.
+
+        \item Configure the monitors for the simulation. Get 
+            \tvbattribute{variables of interest}.
+      \end{enumerate}
+    
+    \paragraph*{Calling a }\tvbclass{Simulator} 
+      \begin{enumerate}
+
+        \item Get \tvbattribute{simulation length}.
+
+        \item Compute estimates of run-time, memory usage and storage.
+
+        \item Check if a particular \tvbattribute{random state} was provided 
+            (random seed). This feature is useful for reproducibility of results, 
+            for instance, getting the same stream of random numbers for the 
+            \tvbclass{Noise}.
+
+        \item Compute the \tvbattribute{number of integration steps}. 
+
+        \item If the simulation is surface-based, then get attributes required
+            to compute \tvbdatatype{Local Connectivity} kernel.
+
+        \item Update state loop
+
+          \begin{enumerate}
+            \item Get the corresponding coupled delayed activity. That is, 
+                compute the the dot product between the weights matrix 
+                (connectome) and the delayed state of the 
+                \tvbattribute{coupling variables}, transformed by a 
+                (long-range) \tvbclass{Coupling} function.
+          
+            \item Update the \tvbattribute{state} array. This is the numerical 
+                integration, i.e., advancing an integration time step, of the 
+                differential equations defining the neuron model. Distal 
+                delayed activity, local instantaneous activity and stimulation 
+                are fed to the integration scheme. 
+    
+            \item Update the \tvbattribute{history}
+
+            \item Push state data onto the \tvbclass{Monitors}. Yield any processed 
+                time-series data point if available. 
+          \end{enumerate}
+      \end{enumerate}
+
+    
+    
+    
+    As a working example, in Code \ref{code:region_deterministic}, we show a 
+    code snippet which uses TVB's scripting interface and some of the classes
+    and modules we have just described to generate one second of brain activity.
+    \add{The for loop in the example code allows scripting users to receive 
+    time-series data as available and separately for each of the monitors processing
+simulated raw data. In this implementation, at each time step or certain
+number of steps, data can be directly stored to disk, reducing the memory
+footprint of the simulation. Such a feature is particularly useful when
+dealing with larger simulations. Likewise, data can be accessed while the
+simulation is still running, which proves to be advantageous for modeling
+paradigms where one of the output signals is fed back to the network model as
+stimulation for instance (see the paragraph about \emph{Dynamic modeling} in
+section} \ref{sec:PerformanceReproducibilityFlexibility}).
+     
+    
+%##-------------------------------------------------------------------##
+%#                             CODE                                   ##
+%##-------------------------------------------------------------------##    
+    % uncoupled a = 0.000042
+    % coupled   a = 0.0042
+%\pagebreak
+\begin{lstlisting}[backgroundcolor=\color{black!5}, 
+                   caption=Script example to simulate 1 second of brain 
+                   activity. Output is recorded with two different monitors.\\,
+                   commentstyle=\itshape\color{green!50!black},
+                   frame=single,
+                   keywordstyle={\bf\ttfamily\color{blue}},
+                   label=code:region_deterministic,
+                   showspaces=false,
+                   showtabs=false]
+    
+from tvb.simulator.lab import *
+        
+#Initialise a Model, Connectivity and Global Coupling
+oscilator = models.Generic2dOscillator()
+white_matter = connectivity.Connectivity()
+white_matter.speed = numpy.array([4.0]) # [mm/ms]
+white_matter_coupling = coupling.Linear(a=0.0042)
+
+#Initialise an Integrator
+heunint = integrators.HeunDeterministic(dt=2**-4) 
+
+#Initialise some Monitors with period in physical time
+mon_raw = monitors.Raw()
+mon_tav = monitors.TemporalAverage(period=2**-2)
+what_to_watch = (mon_raw, mon_tav)
+
+#Initialise a Simulator object
+sim = simulator.Simulator(model = oscilator, 
+                          connectivity = white_matter,
+                          coupling = white_matter_coupling, 
+                          integrator = heunint, 
+                          monitors = what_to_watch)
+
+# Configure the Simulator object
+sim.configure()
+LOG.info("Starting simulation...")
+    
+raw_data,  raw_time  = [], []
+tavg_data, tavg_time = [], []
+    
+# Call the Simulator object -- Run simulation
+for raw, tavg in sim(simulation_length=2**10):
+    if not raw is None:
+        raw_time.append(raw[0])
+        raw_data.append(raw[1])
+    if not tavg is None:
+        tavg_time.append(tavg[0])
+        tavg_data.append(tavg[1])
+LOG.info("Finished simulation.")
+\end{lstlisting}
+ 
+    \subsection{Analyzers and Visualizers}
+    
+    For the analysis and visualisation of simulated neuronal dynamics as well
+    as imported data, such as anatomical structure and experimentally
+    recorded time-series, several algorithms and techniques are currently
+    available in  TVB. Here we list some of the algorithms and methods that
+    are provided to perform analysis and visualization of data through the GUI.
+    
+    \paragraph{Analyzers \textcolon} are mostly standard algorithms for 
+    time-series and network analysis. The analyzers comprise techniques 
+    wrapping functions from Numpy (Fast Fourier Transform (FFT), 
+    auto-correlation, variance metrics), Scipy (cross-correlation), 
+    scikit-learn (ICA) \citep{scikit-learn} and matplotlib-mlab (PCA) 
+    \citep{Hunter_2007}. In addition, there are specific implementations of
+    the wavelet transform, complex coherence \citep{Nolte_2004a,Freyer_2012a} 
+    and multiscale entropy (MSE) \citep{Costa_2002a, Costa_2005, Lake_2011}.
+    
+    \paragraph{Visualizers \textcolon} are tools designed to correctly handle 
+    specific \tvbdatatype{datatypes} and display their content. Representations currently
+    available in the GUI include: histogram plots (Fig. 6A); 
+    interactive time-series plots, EEG (Fig. 6C); 2D head topographic
+    maps (Fig. 6B);  3D displays of surfaces and animations 
+    (Fig. 6D) and network plots. Additionally, for shell users
+    there is a collection of plotting tools available  based on matplotlib and
+    mayavi \citep{mayavi_2011}.
+    
+%%--------------------------------FIGURE--------------------------------------%%
+%% Fig. 6
+
+
+
+\end{methods}   
+%##--------------------------------------------------------------------------##%
+%##                Performance, Reproducibility and Flexibility              ##%
+%##--------------------------------------------------------------------------##%
+    
+    \section{Performance, Reproducibility and Flexibility}\label{sec:PerformanceReproducibilityFlexibility}
+    \paragraph*{Testing for speed}\remove{We ran simulations for all possible
+    combinations of two parameters:     simulation length and integration time step.
+    These parameters, along with     node count and dimensionality of the
+    \tvbclass{Model} dynamics, are the     ones that impose the most crucial
+    constraints regarding memory usage and execution time.} In the context of
+    full brain models there is no other platform against which we could compare
+    the performance results for TVB and define a good ratio run-time/real-time.
+    \add{As a first approximation a simple network of 74 nodes, whose node dynamics
+    were governed by the equations of the \tvbclass{Generic2dOscillator} model
+    (see Code }\ref{code:model_generic}) \add{was implemented in the Brian
+    spiking neural network simulator. The integration step size was 0.125
+    milliseconds ($dt=2^{-3}$ ms) and the simulation length was 2048 milliseconds. This network was
+    evaluated without time delays and using a random sparse connectivity matrix.
+    Execution times were about 4.5 seconds in Brian and 15 seconds in TVB. In
+    contrast, when heterogeneous time delays were included, running times of
+    the simulations implemented in Brian increased considerably (approximately 6.5x)
+    whereas in TVB they hardly changed (approximately 1.2x). Simulations were
+    run on a CPU Intel\textregistered Xeon \textregistered W3520 @ 2.67GHz. These
+    results, although informative, expose the fact that the architectures of TVB and
+    the Brian simulator are different and therefore they have been optimized
+    accordingly to serve distinct purposes from a modeling point of view. }     
+    % 6 MB @ Mac     
+    % 8 MB L3 Cache @ Workstation     
+    % 12 MB L3 Cache @ server nodes
+
+    \add{To assess the performance of TVB in terms of simulation timings}, we
+    also ran simulations for all possible combinations of two parameters:
+    simulation length and integration time step (Fig. \ref{Fig07:ets}A). \remove{These parameters,
+    along with node count and dimensionality of the \tvbclass{Model} dynamics,
+    are the ones that impose the most crucial constraints regarding execution
+    times and memory usage.} We made the following estimates: it takes on
+    average 16 seconds to compute one second of brain network dynamics (at the
+    region level\add{,} with an integration time step of 0.0625
+    milliseconds ($dt=2^{-4}$ ms) \add{and including time delays of the order of 20 milliseconds which amounts to store about 320
+    past states per time step)} on CPUs Intel \textregistered
+    Xeon \textregistered X5672 @ 3.20GHz, CPU cache of 12MB and Linux kernel
+    3.1.0-1-amd64 as operating system. \add{In Fig. }\ref{Fig07:ets}\add{B we quantify how running times
+    increase as a function of the integration time step in 64 seconds long (region-based) 
+    simulations for two different sizes of the connectivity matrix.}
+
+    \add{In general, human cortical connectomes are derived from anatomical
+    parcellations with a variable number of nodes, from less than 100 to over a
+    few thousands nodes} \citep{Zalesky_2010a}\add{. Preliminary results of
+    simulations (data not shown) using connectivity matrices of different sizes (16,
+    32, 64, 128, 256, 512, 1024, 2048 and 4096 nodes) and a supplementary
+    parameter (transmission speed that has an effect on the size of the
+    \tvbattribute{history} array keeping the delayed states of the network)
+    indicate that there is a quadratic grow of the running times for networks
+    with more than 512 nodes. Since performance depends on a large number
+    of parameters which have an effect on both memory (CPU cache and RAM) and CPU usage, and
+    therefore resulting running times arise from the interaction between them,
+    we see the need to develop more tests to stress in particular memory
+    capacity and bandwidth in order to fully understand the aforementioned
+    behavior.}
+
+
+    \note[PSL]{new code with the equations of the generic model}
+
+\begin{lstlisting}[backgroundcolor=\color{black!5}, 
+                   caption=State equations of the generic plane 
+                   oscillator as scripted to run the simulation 
+                   in the Brian simulator. The description of the 
+                   parameters are explained in the API documentation 
+                   and will be discussed in the context of 
+                   dynamical systems elsewhere.\\,
+                   commentstyle=\itshape\color{green!50!black},
+                   frame=single,
+                   keywordstyle={\bf\ttfamily\color{blue}},
+                   label=code:model_generic,
+                   showspaces=false,
+                   showtabs=false]
+# model equations
+eqs = '''
+dV/dt = d * tau * (alpha * W - f * V**3 + e * V**2 + I)
+dW/dt = d * (a + b * V + c * V**2 - beta * W) / tau
+'''
+\end{lstlisting}              
+
+    In Future Work we talk about the approaches to benchmark and   improve the
+    execution times of simulations. \remove{In future analysis, we intend to
+    include additional dimensions, including the number of nodes in the network
+    and a range of dynamic models.} For the present work we have restricted
+    ourselves to present performance results looking at the parameters that have
+    the strongest effect on simulations timings.
+    
+%%--------------------------------FIGURE--------------------------------------%%
+
+%% Fig. 7 
+  
+    \note{Removed svn revision reference}
+    
+    \remove{\paragraph*{Reproducibility of results from the literature}}
+    \add{\paragraph*{Reproducibility of results from the literature}}
+    \citet{Ghosh_2008} and \citet{Deco_2009} demonstrated the important role
+    of three large-scale parameters in the emergence of different cluster
+    synchronization regimes: the global coupling strength factor, time-delays
+    (introduced via the long-range connectivity fiber tract lengths and a
+    unique transmission speed) and noise variance. \add{They built parameter
+    space maps using the Kuramoto synchronization index}. Here, using TVB's
+    scripting interface, we show it is easily possible to \change{replicate
+    the scheme}{build a similar scheme} and perform a parameter space
+    exploration in the coupling strength (\emph{gcs}) and transmission speed
+    (\emph{s}) space. The \tvbdatatype{Connectivity} upon which the 
+    large-scale network is built was the demonstration dataset. It is bi-hemispheric
+    and  consists of 74 nodes, i.e., 37 regions per hemisphere. It includes
+    all the cortical regions but without any sub-cortical structure such as
+    the thalamic nuclei. Its weights are quantified by integer values in the
+    range 0 to 3. The evolution of the local dynamics were represented by the
+    model \emph{Generic2dOscillator}, configured in such a way that a single
+    isolated node exhibited 40Hz oscillations (Fig.
+    \ref{Fig08:results_reproduce_deco_pp}). The variance of the output 
+    time-series was chosen as a simple, yet informative measure to represent the
+    collective dynamics as a function of the parameters under study. Results
+    are shown in Fig. \ref{Fig09:results}B. Parameter sweeps can also be
+    launched from TVB web-interface (see Fig. \ref{Fig10:pse_ui} for an
+    illustration). 
+
+    \add{Currently TVB provides two scalar metrics based on the variance of
+    the output time-series to perform data reduction when exploring a certain
+    parameter space. These are \emph{Variance of the nodes Variances} and
+    \emph{Global Variance}. The former zero-centers the output time-series and
+    compute the variance over time of the concatenated time-series of each  state
+    variable and mode for each node and subsequently the variance of the nodes
+    variances is computed. This metric describes the variability of the temporal
+    variance of each node. In the latter all the time-series are zero-centered and
+    the variance is computed over all data points contained in the output array.}
+    
+    \add[PSL]{With this example we intended to expose the possibility to
+    reproduce workflows, i.e. modeling schemes, found in the literature. TVB
+    is a modeling platform providing a means of cross-validating scientific
+    work by encouraging reproducibility of the results.}
+
+%%--------------------------------FIGURE--------------------------------------%%
+%% Fig. 8  
+%%
+%%    
+%%--------------------------------FIGURE--------------------------------------%%
+%% Fig. 9  
+%%
+%%
+%%--------------------------------FIGURE--------------------------------------%%
+%Fig. 10          
+%%    
+    \paragraph*{Higher-level simulation scenarios using stimulation protocols}
+    As one possible use case, we have set up an example based on the scheme
+    used in \citet{McIntosh_2010}. The goal is to demonstrate how to build
+    stimulation patterns in TVB, use them in a simulation, obtain EEG 
+    recordings of both the activity similar to the resting state \add{(RS)} 
+    and to evoked responses (ER), and finally make a differential analysis 
+    of the complexity of the resulting time-series by computing MSE.
+    
+    In vision neuroscience, the two-stream hypothesis \citep{Schneider_1969}
+    suggests  the existence of two streams of information processing, the
+    ventral and the dorsal  stream. In one of these pathways, the ventral
+    stream, the activity from  subcortical regions project to V1 and the
+    activity propagates to the temporal  cortices through V2 and V4
+    \citep{Goodale_1992}. We systematically stimulated  the area corresponding
+    to the primary visual cortex (V1) to demonstrate the  functioning of TVB
+    stimulation \tvbdatatype{Patterns} and observed how the  the activity
+    elicited by a periodic rectangular pulse propagates to neighboring
+    regions, especially V2.
+    
+    \remove{To further demonstrate the many scenarios that can be 
+    set up in TVB, we simulated the same network model without and with noise 
+    (using deterministic Fig. 11A and stochastic Fig. 11B integration schemes. }  
+
+%%--------------------------------FIGURE--------------------------------------%%
+%% Fig. 11           
+    
+%--------------------------------FIGURE--------------------------------------%%
+%% Fig. 12         
+    
+    Benefiting from TVB's flexibility we \change{have shown}{show} \add{in
+    Fig.} \ref{Fig11:sampenAB} that it is possible to systematically
+    stimulate \change{different brain areas (e.g. occipital region)}{a
+    specific brain region (e.g. V1) and to highlight the anatomical connection
+    to its target region (e.g. V2) by observing the arrival of the delayed
+    activity}; analyze the responses of the model\remove{during both the
+    resting and evoked states}; handle multi-modal simulated data; and extract
+    metrics from computationally expensive algorithms \add{to characterize
+    both the ``resting'' and ``evoked'' states}. \remove{Scripts to reproduce
+    results Figs.11 and 12 are available in the distribution packages of TVB.}
+    
+    \add{Currently, TVB permits the stimulation and read-out of activity from
+    any brain area defined in the anatomical parcellation used to derive the
+    connectome. This modeling example was built imposing a strong restriction
+    on the number of regions to stimulate, since global dynamics can quickly
+    become complex. Additionally, to demonstrate the many scenarios that can
+    be set up in TVB, we simulated the same brain network model under the
+    influence of a stimulus, first without noise }(Fig. \ref{Fig11:sampenAB}A:
+    using Heun deterministic method) and then with white noise (Fig.
+    \ref{Fig11:sampenAB}B: using Heun stochastic method). \add{The first approach
+    makes it easier to see the perturbations induced by the stimulus and the
+    propagation of activity from one region to the other. The second approach
+    is a more realistic representation of the neural activity.}
+    
+    \add{Results of the proposed modeling protocol are presented in} Fig. 
+    \ref{Fig12:sampen_res}\add{ where the EEG traces from channel Oz for 
+    the resting and evoked states are shown together with the MSE estimates.} 
+
+    \add{Scripts to reproduce results from} Figs.\ref{Fig11:sampenAB} and 
+    \ref{Fig12:sampen_res} \add{are available in the distribution packages of 
+    TVB.}
+    
+    With the availability of surface-based simulations the challenge of 
+    replicating topographic maps of different sensory systems, such as those 
+    found in the primary visual cortex \citep{Hinds_2009}, could be addressed. 
+
+    
+    \paragraph*{Dynamic modeling} From both the shell and web interface it is
+    possible to exploit another feature of TVB: namely, simulation continuation,
+    i.e., a simulation can be stopped allowing users to modify model parameters,
+    scaling factors, apply or remove stimulation or spatial constraints (e.g. local
+    connectivity), or make any other change that does not alter the spatiotemporal
+    domain of the system or its output (integration step, transmission speed and
+    spatial support) and then resumed without the need of creating a new
+    \tvbclass{Simulator} instance. Furthermore, this capability opens the
+    possibility to dynamically update the simulation at runtime. Such a dynamic
+    approach leads toward an adaptive modeling scheme where stimuli and other
+    factors may be regulated by the ongoing activity (this last feature can be handled
+    only from the scripting interface for the moment).
+     
+%##--------------------------------------------------------------------------##%
+%##                               DISCUSSION                                 ##%
+%##--------------------------------------------------------------------------##%
+
+    \section{Discussion} 
+    % The bombs and stuff 
+
+    We have presented the architecture and usage of TVB, a neuroinformatics
+    platform developed for simulations of network models of the full brain. Its
+    scientific core has been  developed by integrating concepts from theoretical,
+    computational, cognitive and clinical neuroscience, with the aim to integrate
+    neuroimage modalities along with the interacting mesoscopic and macroscopic
+    scales of a biophysical model of the brain. From a computational modeling
+    perspective  TVB constitutes an alternative to approaches such as the work of
+    \citet{Riera_2005} and  more recently that of \citet{Valdes-Sosa_2009}, as well
+    as other relevant studies mentioned in the main text of this article. From a
+    neuroinformatics perspective, TVB lays the groundwork for the integration of
+    existing paradigms in the theory of large-scale models of the brain, by
+    providing a general and flexible framework where the advantages and limitations
+    of each approach may be determined. It also provides the community with a
+    technology, that until now had not been publicly available, accessible by
+    researchers with different levels and backgrounds, enabling systematic
+    implementation and comparison of neural mass and neural field  models,
+    incorporating biologically realistic connectivity and cortical geometry and with
+    the potential to become a novel tool for clinical interventions. While many
+    other environments simulate     neural activity at the level of neurons (Brian
+    simulator, MOOSE, PCSIM,     NEURON, NEST, GENESIS) \citep{Goodman_2008,
+    Brette_2011,Ray_2008,Hines_2001,Gewaltig_2007scholarpedia,Pecevski_2009},  even mimicking a
+    number of specific brain functions \citep{Eliasmith_2012}, they, most
+    importantly, do not consider the space-time structure of full brain connectivity
+    constraining whole brain neurodynamics, \add{as a crucial component in their
+    modeling paradigm}.  \add{Other     approaches to multi-modal integration such
+    as Statistical Parametric Mapping     (SPM) perform statistical fitting to
+    experimental data at the level of a     small set of nodes}
+    \citep{Friston_1995, Friston_2003, David_2006, Pinotsis_2011} (i.e., they are
+    data-driven as in \citet{Freestone_2011}), \add{thus diverging from our approach
+    that could be     categorized as a  purely ``computational neural modeling''
+    paradigm as     described in}  \citet{Bojak_2011}. \add{From this perspective,
+    the goal is     to capture and reproduce  whole brain dynamics by building a
+    network     constrained by its structural  large-scale connectivity and
+    mesoscopic     models  governing the nodes intrinsic dynamics.}
+    
+    % NOTE: mainly because  they do not aim to investigate large-scale models
+    Also, the extension of neuronal level modeling to large brain structures
+    requires vast supercomputers to emulate the large number of complex
+    functional units. \change{Focusing on the brain's large-scale
+    architecture, in addition to the dimension reduction accomplished through
+    the mean field methods applied on the mesoscopic scale, allows TVB to make
+    computer simulations on the full brain scale on workstations and network
+    workstation parallel clusters, with no need to use supercomputing
+    resources.} {Focusing on the brain's large-scale architecture, in addition
+    to the dimension reduction accomplished through the mean field methods
+    applied on the mesoscopic scale, TVB allows for computer simulations on
+    the full brain scale on workstations and small computing clusters, with no
+    need to use supercomputing resources.}
+    
+    % the large-scale structure approach
+    The simulator component of TVB has the goal of simulating mesoscopic
+    neural dynamics on large-scale brain networks. It does not intend to
+    build brain models at the level of neurons \remove{(Goodman and Brette,
+    2008, 2009; Cornelis et al., 2012)} \citep{Goodman_2009,  Cornelis_2012},
+    however, it does leverage information  from microscopic models to add
+    detail and enhance the performance of  the neural population models, which
+    act as building blocks and functional units of the network. TVB thus
+    represents a unique tool to systematically  investigate the dynamics of
+    the brain, emphasizing its large-scale network  nature and moving away
+    from the study of isolated regional responses, thereby considering the
+    function of each region in terms of the interplay among brain regions. The
+    primary spatial support (neuroanatomical data)  on top of which the large-scale 
+    network model is built has a number of  implications:
+    
+    \begin{enumerate}
+
+        \item  it constraints the type of network dynamics; dynamics that 
+               could be further related to physiology and behavior 
+               \citep{Senden_2012}; 
+
+        \item  it permits a systematic investigation of the consequences of the 
+               particular restrictions imposed by that large-scale structure 
+               and the effect of changes to it. 
+
+        \item  it provides a reliable and geometrically accurate model of 
+               sources of neural activity, enabling realistic forward solutions
+               to EEG/MEG based on implementations of boundary element methods 
+               (BEM) or other approaches such as finite difference time domain 
+               methods (FDTD).
+    \end{enumerate}
+    
+    % the stimulation paradigm
+     On the basis of the literature, theoretical and clinical studies seeking to 
+     better understand and describe certain brain functions and structure use 
+     stimulation as an essential part of their protocols. Stimulation is a way 
+     to probe how the system respond under external perturbations adapting itself 
+     to the new environmental conditions or to categorize responses when 
+     stimulation represents real-life (visual, auditory, motor) sensory inputs. 
+     Among the current features of TVB, the easy generation of a variety of 
+     stimulation patterns is to be recognized as one of its great advantages and 
+     contributions to experimental protocol design. TVB permits the development 
+     of simple stimulation routines, allowing evaluation of the viability and usefulness 
+     of certain stimulation procedures. 
+     
+     % The good science promese
+     TVB represents a powerful research platform, combining experimental design
+     and numerical simulations into a collaborative framework that allows 
+     sharing of results and the integration of data from other applications. 
+     Naturally, this leads to the potential for an increased level of 
+     interaction among researchers of the broad neuroscience community. In the 
+     same direction, TVB is also an extensible validation platform since it 
+     supports the creation of basic modeling refinement loops, making model 
+     exploration and validation a relatively automated procedure. For instance,  
+     after generating a brain network model, exploring the system's parameter 
+     space by adjusting parameters of both the local dynamics and the large
+     scale structure can be achieved with ease. Further, effects of local 
+     dynamics and network structure can be disentangled by evaluating distinct
+     local dynamic models on the same structure or the same local dynamic 
+     model coupled through distinct structures. This constrained flexibility
+     makes it easy for modelers to test new approaches, directly compare them
+     with existing approaches and reproduce their own and other researchers' 
+     results. Reproducibility is indeed a required feature to validate and 
+     consequently increase the reliability of scientific work 
+     \citep{Donoho_2010} and the extensibility of TVB's scientific 
+     components, granted by its modular design, provides a mechanism to help 
+     researchers achieve this. 
+     
+     % The clinical dreams
+     The brain network models of TVB, being built on explicit anatomical 
+     structure, enable modeling investigations of practical clinical interest.
+     Specifically, whenever a dysfunction or disease expresses itself as a 
+     change to the large scale network structure, for instance, in the case of 
+     lesions in white-matter pathways, the direct replication of this 
+     structural change in TVB's brain network models is straight forward.
+     
+    %##--------------------------------------------------------------------------##%
+    %##                               FUTURE                                     ##%
+    %##--------------------------------------------------------------------------##% 
+    
+    \section*{Future Work}
+
+    \add{Regarding performance, of special importance will be to evaluate all
+    the parameters that have an effect on both memory usage and execution time
+    for surface-based simulations. The reason is that realistic brain network
+    models are built on top of surface meshes constructed by thousands of
+    vertices per hemisphere ($2^{13}$ for the TVB demonstration cortical surface) but
+    can easily have more than 40,000. 
+
+    Equally important is to develop more
+    tests to generally evaluate the simulation engine, paying close attention to
+    keep the consistency and stability of the algorithms currently implemented.
+    
+    Another aspect that deserves careful attention is the description of our
+    modeling approach that was largely beyond the scope of this text.
+    Therefore, the theory underlying the different methods involved in the
+    development of a generalized framework for brain network models is to be
+    presented in future scientific publications.}
+
+    \remove{The \tvbmodule{simulator} and \tvbdatatype{datatypes} of TVB are written in
+    Python. Simulations benefit from vectorized numerical computations with NumPy
+    arrays and are enhanced by the use of the \emph{numexpr} package. Although 
+    this allows rather efficient single simulations, the desire to systematically
+    explore the parameter spaces of the neural dynamic models, and to compare many
+    connectivity matrices, has lead to the implementation of code generation 
+    mechanisms for the majority of the simulator core -- producing C code for both
+    native CPU and also graphics processing units (GPU), leading to a significant 
+    speed up of parameter sweeps and parallel simulations (5x from Python to C,
+    40x from C to GPU). Such graphics units have become popular in scientific
+    computing for their relatively low price and high computing power. Going 
+    forward, the GPU implementation of TVB will require testing and optimization
+    before placing it in the hands of users. }
+
+    % accessible to the public
+    \remove{TVB is meant to be a large collaborative project, available
+    not only under the form of customized Python modules but as an
+    open-source cross-platform toolbox. We therefore see the need of
+    creating a public repository, this time using the distributed version
+    control system \emph{git} (Chacon, 2009), to make accessible
+    the scientific core and to gather, manage and integrate contributions from
+    the community. Special effort is being made to provide a good code-coverage 
+    including regression tests. The public git repository is scheduled for March
+    2013 along with the latest TVB release.} 
+ 
+    \remove{Another goal of great relevance in clinical neuroscience research, is to
+    implement a new Monitor based on a forward model of neural activity to  
+    stereoelectroencephalography (sEEG). This invasive technique is used to
+    identify areas of the human brain, which are the source of epileptic seizures.
+    Each patient has a different implantation scheme of depth needle like
+    electrodes. This new \tvbclass{Monitor} class would output simulated 
+    measurements from virtual sensors inside the brain. }
+
+    % the educational platform - spread the word   
+    To allow a most optimal dissemination of knowledge in TVB we are currently 
+    developing a web-based educational platform that will allow training on the
+    usage of TVB, as well as serve as a key reference.
+   
+    % new datasets
+    As simulations in TVB are built on the large-scale anatomical structure of
+    the human brain, continued work to integrate new, reliable, sources of 
+    structural data is essential to the progress of the platform. An obvious
+    future resource in this regard will be the newly developed database of the 
+    Human Connectome Project \citep{Essen_2012b, Essen_2012c}.
+    
+    \section*{Information Sharing Statement (License)}
+    The data and software in this study belong to an ongoing project; \add{it 
+    is free software and licensed under the GNU General Public License version 2 
+    as published by the Free Software Foundation.} The latest releases of \TVB 
+    including the source code and demo data are free to download from 
+    \url{http://www.thevirtualbrain.org}. The source code \add{available in the
+    public repository} includes the latest experimental features regarding GPU 
+    implementation. 
+    
+    %\section*{Disclosure/Conflict-of-Interest Statement}
+
+    \section*{Acknowledgments}
+    \paragraph{Funding\textcolon} The research reported herein was supported by the Brain 
+    Network Recovery Group through the James S. McDonnell Foundation and the FP7-ICT
+    BrainScales. PSL is supported by a doctoral fellowship from Ministere de la Recherche.
+
+        %include bibliography and its style 
+        \bibliographystyle{apalike}
+        \bibliography{../tvbphd/contents/Bibliography/TVB-Bibliography}
+%-------------------------------------------------------------------------------%
+    \section*{}
+    
+    \begin{figure*}
+        \centering
+        %\includegraphics[width=\textwidth]{FIG01_tvb_architecture.jpg}
+        \caption{\TVB Architecture: TVB provides two independent interfaces 
+        depending on the interaction with users. Blocks in the back-end are 
+        transparently used by different top application layers. 
+        TVB-\tvbdatatype{Datatypes}, are the common language between different 
+        components (analyzers, visualizers, simulator, uploaders).\add{ They represent ``active data'' 
+        in the sense that, when TVB is configured with
+        a database, data contained in TVB-\tvbdatatype{Datatypes} instances are 
+        automatically persistent}. Currently the console interface works without
+        the storage layer, keeping the results just in memory. S-Users need to 
+        manually handle data import and export operations.}
+      \label{Fig01:tvb_soft_architecture}
+  \end{figure*}
+
+  \begin{figure*}
+      %\caption{FIG 2}
+       \centering
+       %\includegraphics{FIG02_ui_main_areas_map.jpg}
+       \caption{\change{Typical stages of a workflow through \TVB web 
+       interface: USERS configure their personal information and technical 
+       settings for TVB's UI. They can create and manage several PROJECTS and
+       interact with the SIMULATOR, where simulations are configured and 
+       launched. Results can be immediately analyzed and visualized to have a
+       quick overview of the ongoing project. Later on, simulated data can be
+       exported in HDF5 format and may be used outside of the framework. In 
+       the SIMULATOR area a history of launched simulations is kept to have 
+       the traceability of any modifications that took place in the simulation
+       chain.}{Main working areas of \TVB's web interface: in \textbf{USER} 
+       personal information (account settings) as well as hardware and 
+       software preferences (technical settings) are configured. Through the
+       \textbf{PROJECT} area users access and organize their projects, data,
+       figures and the operations dashboard. Input and output simulated data
+       can be exported in HDF5 format and may be used outside of the framework.
+       Brain network models and execution of simulations are configured and 
+       launched respectively in \textbf{SIMULATOR}. In this area results can 
+       be immediately analyzed and visualized to have a quick overview of the current model. 
+       A history of launched simulations is kept to have the 
+       traceability of any modifications that took place in the simulation 
+       chain. \textbf{STIMULUS} provides a collection of tools to build 
+       stimulation patterns that will be available to use in the simulations.
+       Finally, \textbf{CONNECTIVITY} provides an interactive environment to 
+       the edit and visualize connectivity matrices.}
+       }
+       \label{Fig02:tvb_wui}
+   \end{figure*}
+
+   \begin{figure*}%
+    %\caption{FIG 3}
+    \centering
+    %\includegraphics[width=\textwidth]{FIG03_ui}
+    \caption{\add{UI screenshots}. \textbf{(A)} \textbf{SIMULATOR} Area. 
+    Having multiple panels allows a quick overview of previous simulations 
+    (left), model parameters for the currently selected simulation (middle), 
+    and summary displays of the data associated with the currently selected 
+    simulation (right). \textbf{(B)} shows the interface for editing and 
+    visualising the structural connectivity, for one of the six possible 
+    connectivity visualisations. \textbf{(C)} \textbf{PROJECT} Area - 
+    operations \change{tab}{dashboard}. \remove{This dashboard lists all the
+    operations with their current status (running, error, finished), as well 
+    as who created the operation, wall-time, execution time and icons for 
+    resulting DataTypes.} On the left column, users can compose filters to 
+    search through all the operations on the list.}%
+  \label{Fig03:ui_screenshots}
+  \end{figure*}
+
+  \begin{figure*}%
+  %\caption{FIG 4}
+  \centering
+  %\includegraphics[width=\textwidth]{FIG04_spatial_support}
+  \caption[Dtypes]{Demonstration datasets exist in TVB for the anatomical 
+            structure on which simulations are built, including a triangular
+            mesh surface representation of the neocortex \textbf{(A)} and 
+            white matter fiber lengths \textbf{(B)}. However, new data from 
+            structural imaging such as MRI, DTI, and DSI for individual 
+            subjects, as well as data from the literature can be used and 
+            wrapped in a TVB-\tvbdatatype{Datatype}.
+         }
+     \label{Fig04:connectivity}%
+ \end{figure*}
+
+ \begin{figure*}
+    %\caption{FIG 5}
+    \centering
+    %\includegraphics[width=\textwidth]{FIG05_scientific_library}
+     \caption{Diagram of the configurable elements for building a brain 
+       network model and launching a simulation. TVB can
+       incorporate cortical connectivity information from an individual's 
+       tractographic and cortical geometry data. The \tvbdatatype{Connectivity}
+       object contains matrices defining the connection strengths and time 
+       delays via finite signal transmission speed between all regions, while the folded 
+       \tvbdatatype{Cortical Surface} mesh provides the spatial support for
+       finer resolution models. In the latter case a 
+       \tvbdatatype{Local Coupling} defines the interaction between 
+       neighboring nodes. In its simplest form local connectivity is spatially
+       invariant, however, support exists for spatial inhomogeneity. Signal 
+       propagation via local connectivity is instantaneous (no time delays),
+       which is a reasonable approximation considering the short distances 
+       involved.
+       \textbf{Together, the cortical surface with its local connectivity, the 
+       long-range connectivity matrix, and the neural mass models defining the
+       local dynamics define a full brain network model}. Additionally,
+       stimulation can be applied to a simulation. The stimulation patterns 
+       are built in terms of spatial and temporal equations chosen 
+       independently. For region-based network models, it is only possible to
+       build time dependent stimuli since there is not a spatial extent for a
+       region node. However, node-specific weightings can be set to modulate
+       the intensity of the stimulus applied to each node. For surface-based
+       models, equations with finite spatial support are evaluated as a 
+       function of distance from one or more focal points (vertices of the 
+       surface), where the equation defines the spatial profile of the 
+       stimuli. The neural source activity from both region or surface-based
+       approaches can be projected into EEG, MEG and BOLD \citep{Buxton_1997,
+       Friston_2000} space using a forward model \citep{Breakspear_2007}.
+     }
+      \label{Fig05:tvb_sim}
+  \end{figure*}
+
+  \begin{figure*}[htp]%
+  %\caption{FIG 6}
+  \centering
+  %\includegraphics{FIG06_vis_anz}
+  \caption[Visualizers]{Visualizers. \textbf{(A)} Histogram of a graph metric
+  as a function of nodes in the connectivity matrix. \textbf{(B)} A 2D 
+  projection of the head. The color map represents a graph metric computed on
+  the connectivity matrix. \textbf{(C)} EEG visualizer combines a rendered 
+  head surface, an overlay with the sensors positions and an interactive 
+  time-series display. \textbf{(D)} An animated display of the spatiotemporal
+  pattern applied to the cortical surface. Red spots represent the focal 
+  points of the spatial component of the stimulus.
+     }%
+  \label{Fig06:ui_vis}%
+  \end{figure*}
+
+  \begin{figure*}%   
+  %\caption{FIG 7}   \centering
+  %\includegraphics[]{FIG07_}            
+    \caption[Results]{\textbf{(A)} \add{As
+      expected for fixed time-step schemes,} execution times scale linearly with
+      the number of integration steps. We used seven values of simulation
+      lengths (1, 2, 4, 8, 16, 32 and 64 seconds) and five values of integration
+      time step: $dt=0.25=2^{-2}$, $dt=0.125=2^{-3}$, $dt=0.0625=2^{-4}$,
+      $dt=0.03125=2^{-5}$ and $dt=0.015625=2^{-6}$ milliseconds). For each
+      possible combination 100 simulations were performed. The network model
+      consisted of 74 nodes (with 2 state variables and one mode per node).
+      Numerical integration was based on Heun's stochastic method. We plot the
+      average execution time with the error bars representing the standard
+      deviation over simulations. The inset shows a narrower range for
+      simulation lengths between 1 and 4 seconds. Axes units and color code are
+      the same as those displayed in the main plot. \textbf{(B)} Here, execution
+      times are shown as a function of the integration time step size, $dt$, for
+      two different number of nodes  (solid and dashed lines correspond to connectivity matrices of 64
+      and 128 nodes respectively) for a specific conduction speed (4mm/ms) and simulation length (64 seconds).
+      Both axes are in logarithmic scale with base 2. In this case, halving  
+      $dt$ or doubling the number of nodes in the connectivity matrix, $N$, 
+      doubles the running time. However, as mentioned in the text, for larger networks
+      execution times seem to grow quadratically as a function of the number of nodes in the network.
+      Further tests need to be developed to understand this behavior.
+      }
+      \label{Fig07:ets}%   
+  \end{figure*}
+
+  \begin{figure*}
+  %\caption{FIG 8}
+  \centering
+  %\includegraphics[width=0.5\textwidth]{FIG08_pp_interactive}
+       \caption{Phase portrait using TVB's interactive phase plane tool 
+              (accessible from both shell and graphical interfaces): the
+               blue line corresponds to a trajectory of a single oscillator
+               node isolated and without noise, \change{integration scheme 4th
+               Runge-Kutta}{4th order Runge-Kutta integration scheme}. In the 
+               bottom panel, the corresponding trajectories of both the $v(t)$
+               and $w(t)$ state variables of the model are shown. The activity
+               exhibits oscillations at approximately 40 Hz.}
+   \label{Fig08:results_reproduce_deco_pp}
+   \end{figure*}
+
+   \begin{figure*}%
+  %\caption{FIG 9}
+  \centering
+  %\includegraphics{FIG09_replicate}
+        \caption[Results]{
+        \textbf{(A)} the activity of individual regions are illustrated in 
+        colored lines. The black line represents the average activity over the
+        network nodes. Here brain regions are weakly coupled changing both the
+        collective and local dynamics of the network. \textbf{(B)} Using TVB 
+        scientific library as a python module we can conveniently run thousands
+        of simulations in parallel on a cluster. \add{Note that TVB 
+        parallelizes different tasks e.g. simulations and analyses, taking 
+        advantage of multi-core systems, however it does not parallelize the 
+        processes themselves.} \change{This allows}{Simultaneous simulations 
+        allow for} a systematic parameter space exploration to rapidly gain 
+        insights of the whole brain dynamics repertoire. In this plot, the 
+        magnitude and color scale correspond to one the variance computed over
+        all the elements of the N-dimensional output array 
+        (\emph{Global Variance}). Simulations were performed on a cluster based
+        on the Python demo scripts available in the release packages. On of the
+        major strengths of \TVB is that G-Users are enabled to launch parameter
+        sweeps through the UI without the need to know \change{parallel 
+        programming}{how to submit parallel jobs} (see Fig. \ref{Fig10:pse_ui}).
+          }
+      \label{Fig09:results}%
+  \end{figure*}
+
+
+    \begin{figure*}
+        %\caption{FIG 10}
+        \centering
+        %\includegraphics{FIG10_pse_UI}
+        \caption{One of TVB's major strengths is the capability to launch 
+        parallel simulations through the UI. We show a screenshot of the the 
+        resulting display when sweeping across two different parameters of the
+        \emph{Generic2dOscillator} model. Here each data point represents two 
+        metrics: size is mapping the \emph{Global Variance} and color 
+        corresponds to the \emph{Variance of the nodes Variance}. These results
+        provide a topography of the stability space allowing users to 
+        distinguish, and thus select, combinations of critical parameters 
+        values.}
+      \label{Fig10:pse_ui}
+  \end{figure*}
+
+    \begin{figure*}%
+        %\caption{FIG 11}
+        \centering
+        %\includegraphics{FIG11_ventral_stream}
+        \caption{
+        \textbf{(A)} The upper left blue panel shows the raw traces of nodes V2
+        and V1; the latter stimulated with a rectangular pulse of width equal 
+        to 5 milliseconds \add{and repetition frequency of 1 Hz.} Signals are 
+        normalized by their corresponding maximum value. The right blue panel 
+        show the signals for a shorter period of time. Amplitudes are not 
+        normalized to emphasize the relative difference between the two 
+        regions. Middle panels illustrate the stimulus pattern. Lower red 
+        panels display the activity as projected onto EEG space and recorded 
+        from channels Oz and O1. The default EEG cap in TVB consists of 62 
+        scalp electrodes distributed according to the 10-20 international 
+        system \citep{Klem_1999}. \add{In this simulation a deterministic 
+        integration scheme was employed to obtain the time-series of neural 
+        activity, since noise was not applied to the model's equations}. 
+        \change{The same description as in  \textbf{(A)} applies. (B) However,
+        notice the slow dumped oscillations after stimulus onset. The 
+        approximate characteristic frequency of these waves is 10 Hz.}{\textbf{(B)} 
+        The same description as in \textbf{(A)} applies. The main difference 
+        with the previous simulation is that here white noise was added to the 
+        system.}    
+     }
+      \label{Fig11:sampenAB}%
+  \end{figure*}
+
+
+\begin{figure*}
+        %\caption{FIG 12}
+        \centering
+        %\includegraphics[width=\textwidth]{FIG12_mse.jpg}
+        \caption{The green and blue panels show EEG recordings from electrode 
+        Oz during the resting state , i.e., in the absence of stimulation and 
+        in the stimulated condition respectively, notice the slow damped 
+        oscillations after stimulus onset at a approximately 10 Hz; the light 
+        gray trace depicts the stimulation pattern. The bottom panel displays 
+        \change{MSE}{multiscale entropy estimates} computed on the Oz 
+        time-series at different temporal scales \change{.}{using the dataset
+        obtained by means of a stochastic integration scheme.}}
+       \label{Fig12:sampen_res}
+\end{figure*}
+%------------------------------------------------------------------------------
+% Pretty model template
+%\newpage
+%\pagebreak
+\section*{}
+%\include{sup_model_template}
+
+\end{document}
